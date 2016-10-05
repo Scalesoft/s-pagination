@@ -5,8 +5,10 @@
     <meta charset="utf-8" />
     <title>Pagination DEMO</title>
     <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
     <script src="dist/pagination.js"></script>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />
 </head>
 <body>
 <h1>Pagination DEMO</h1>
@@ -27,6 +29,14 @@
         <div id="pagination-2"></div>
     </div>
     <hr />
+    
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-3"></span>
+
+        <div id="pagination-3"></div>
+    </div>
+    <hr />
 </div>
     
 <script>
@@ -36,6 +46,10 @@
 
     function pageClick2(pageNumber) {
         $("#page-number-2").text(pageNumber);
+    }
+
+    function pageClick3(pageNumber) {
+        $("#page-number-3").text(pageNumber);
     }
 
     $(document).ready(function () {
@@ -56,6 +70,14 @@
             showInput: true
         });
         pagination2.make(itemsCount, itemsOnPage);
+
+        var pagination3 = new Pagination({
+            container: $("#pagination-3"),
+            pageClickCallback: pageClick3,
+            maxVisibleElements: 9,
+            showSlider: true
+        });
+        pagination3.make(itemsCount, itemsOnPage);
     });
 </script>
 </body>

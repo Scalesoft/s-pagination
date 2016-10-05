@@ -14,7 +14,9 @@ var Pagination = (function () {
         this.paginationContainer.empty();
         var $innerContainer = $(document.createElement("div"));
         $innerContainer.attr("style", "display: inline-block;");
-        //TODO slider
+        if (this.options.showSlider) {
+            $innerContainer.append(this.createSlider());
+        }
         $innerContainer.append(this.createPageList(defaultPageNumber));
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
@@ -28,6 +30,7 @@ var Pagination = (function () {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
         $(this.goToPageInput).val(newPageNumber);
+        $(this.sliderDiv).slider("value", newPageNumber);
         this.options.pageClickCallback(newPageNumber);
     };
     Pagination.prototype.createPageList = function (defaultPageNumber) {
@@ -35,7 +38,8 @@ var Pagination = (function () {
         $(paginationUl)
             .addClass("pagination")
             .addClass("pagination-sm")
-            .css("margin-bottom", "0");
+            .css("margin-bottom", "0")
+            .css("margin-top", "7px");
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
         for (var i = 1; i <= this.pageCount; i++) {
@@ -106,6 +110,21 @@ var Pagination = (function () {
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     };
+    Pagination.prototype.createSlider = function () {
+        var sliderContainer = document.createElement("div");
+        var slider = document.createElement("div");
+        $(sliderContainer)
+            .addClass("pagination-slider")
+            .attr("style", "margin-top: 7px;")
+            .append(slider);
+        $(slider).slider({
+            min: 1,
+            max: this.pageCount,
+            change: this.onSliderChange.bind(this)
+        });
+        this.sliderDiv = slider;
+        return sliderContainer;
+    };
     Pagination.prototype.onPageClick = function (event) {
         event.preventDefault();
         var pageValue = $(event.target).data("page-number");
@@ -135,6 +154,11 @@ var Pagination = (function () {
     Pagination.prototype.onGoToInputKeyPress = function (event) {
         if (event.keyCode === 13) {
             this.onGoToPageClick();
+        }
+    };
+    Pagination.prototype.onSliderChange = function (event, ui) {
+        if (ui.value !== this.currentPage) {
+            this.updateCurrentPage(ui.value);
         }
     };
     Pagination.prototype.updateVisiblePageElements = function () {

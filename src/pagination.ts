@@ -6,6 +6,7 @@ class Pagination {
     private currentPage: number;
     private usePaginationDots = false;
     private goToPageInput: HTMLInputElement;
+    private sliderDiv: HTMLDivElement;
 
     constructor(options: IPaginationOptions) {
         this.options = options;
@@ -25,10 +26,10 @@ class Pagination {
         var $innerContainer = $(document.createElement("div"));
         $innerContainer.attr("style", "display: inline-block;");
 
-        //TODO slider
-
+        if (this.options.showSlider) {
+            $innerContainer.append(this.createSlider());
+        }
         $innerContainer.append(this.createPageList(defaultPageNumber));
-
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
         }
@@ -46,6 +47,7 @@ class Pagination {
         this.updateVisiblePageElements();
 
         $(this.goToPageInput).val(newPageNumber);
+        $(this.sliderDiv).slider("value", newPageNumber);
 
         this.options.pageClickCallback(newPageNumber);
     }
@@ -55,7 +57,8 @@ class Pagination {
         $(paginationUl)
             .addClass("pagination")
             .addClass("pagination-sm")
-            .css("margin-bottom", "0");
+            .css("margin-bottom", "0")
+            .css("margin-top", "7px");
 
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
@@ -144,6 +147,24 @@ class Pagination {
         return inputGroupDiv;
     }
 
+    private createSlider(): HTMLDivElement {
+        var sliderContainer = document.createElement("div");
+        var slider = document.createElement("div");
+        $(sliderContainer)
+            .addClass("pagination-slider")
+            .attr("style", "margin-top: 7px;")
+            .append(slider);
+
+        $(slider).slider({
+            min: 1,
+            max: this.pageCount,
+            change: this.onSliderChange.bind(this)
+        });
+
+        this.sliderDiv = slider;
+        return sliderContainer;
+    }
+
     private onPageClick(event: JQueryEventObject) {
         event.preventDefault();
         var pageValue = $(event.target).data("page-number");
@@ -176,6 +197,12 @@ class Pagination {
     private onGoToInputKeyPress(event: JQueryEventObject) {
         if (event.keyCode === 13) {
             this.onGoToPageClick();
+        }
+    }
+
+    private onSliderChange(event: Event, ui: JQueryUI.SliderUIParams) {
+        if (ui.value !== this.currentPage) {
+            this.updateCurrentPage(ui.value);
         }
     }
     
@@ -247,7 +274,7 @@ interface IPaginationOptions {
     container: HTMLDivElement | JQuery;
     pageClickCallback: (pageNumber: number) => void;
     maxVisibleElements?: number;
-    //showSlider?: boolean;
+    showSlider?: boolean;
     showInput?: boolean;
     //isEnhancedMode?: boolean;
 }
