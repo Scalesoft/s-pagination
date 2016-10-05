@@ -9,6 +9,11 @@
     <script src="dist/pagination.js"></script>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />
+    <style>
+        body {
+            margin: 0 20px;
+        }
+    </style>
 </head>
 <body>
 <h1>Pagination DEMO</h1>
@@ -67,7 +72,8 @@
             container: $("#pagination-2"),
             pageClickCallback: pageClick2,
             maxVisibleElements: 9,
-            showInput: true
+            showInput: true,
+            inputTitle: "Přejít na stranu"
         });
         pagination2.make(itemsCount, itemsOnPage);
 

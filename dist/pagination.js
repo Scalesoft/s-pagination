@@ -31,6 +31,7 @@ var Pagination = (function () {
         this.updateVisiblePageElements();
         $(this.goToPageInput).val(newPageNumber);
         $(this.sliderDiv).slider("value", newPageNumber);
+        $(this.sliderTipDiv).text(newPageNumber);
         this.options.pageClickCallback(newPageNumber);
     };
     Pagination.prototype.createPageList = function (defaultPageNumber) {
@@ -107,12 +108,24 @@ var Pagination = (function () {
         $(goToPageIcon)
             .addClass("glyphicon")
             .addClass("glyphicon-arrow-right");
+        if (this.options.inputTitle) {
+            $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
+        }
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     };
     Pagination.prototype.createSlider = function () {
         var sliderContainer = document.createElement("div");
         var slider = document.createElement("div");
+        var tooltip = document.createElement("div");
+        var tooltipArrow = document.createElement("div");
+        var tooltipInner = document.createElement("div");
+        var showSliderTip = function () {
+            $(tooltip).stop(true, true).show();
+        };
+        var hideSliderTip = function () {
+            $(tooltip).fadeOut(600);
+        };
         $(sliderContainer)
             .addClass("pagination-slider")
             .attr("style", "margin-top: 7px;")
@@ -120,9 +133,31 @@ var Pagination = (function () {
         $(slider).slider({
             min: 1,
             max: this.pageCount,
-            change: this.onSliderChange.bind(this)
+            change: this.onSliderChange.bind(this),
+            start: showSliderTip,
+            stop: hideSliderTip,
+            slide: function (event, ui) {
+                showSliderTip();
+                $(tooltipInner).text(ui.value);
+            }
         });
+        $(tooltip)
+            .addClass("tooltip")
+            .addClass("top")
+            .attr("style", "opacity: 1; width: 60px; bottom: 120%; margin-left: -23px;")
+            .append(tooltipArrow)
+            .append(tooltipInner)
+            .hide();
+        $(tooltipArrow).addClass("tooltip-arrow");
+        $(tooltipInner).addClass("tooltip-inner");
+        $(".ui-slider-handle", slider)
+            .css("outline-style", "none")
+            .css("outline-width", 0)
+            .append(tooltip)
+            .hover(showSliderTip)
+            .mouseout(hideSliderTip);
         this.sliderDiv = slider;
+        this.sliderTipDiv = tooltipInner;
         return sliderContainer;
     };
     Pagination.prototype.onPageClick = function (event) {

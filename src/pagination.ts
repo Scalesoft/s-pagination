@@ -7,6 +7,7 @@ class Pagination {
     private usePaginationDots = false;
     private goToPageInput: HTMLInputElement;
     private sliderDiv: HTMLDivElement;
+    private sliderTipDiv: HTMLDivElement;
 
     constructor(options: IPaginationOptions) {
         this.options = options;
@@ -48,6 +49,7 @@ class Pagination {
 
         $(this.goToPageInput).val(newPageNumber);
         $(this.sliderDiv).slider("value", newPageNumber);
+        $(this.sliderTipDiv).text(newPageNumber);
 
         this.options.pageClickCallback(newPageNumber);
     }
@@ -143,6 +145,10 @@ class Pagination {
             .addClass("glyphicon")
             .addClass("glyphicon-arrow-right");
 
+        if (this.options.inputTitle) {
+            $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
+        }
+
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     }
@@ -150,6 +156,18 @@ class Pagination {
     private createSlider(): HTMLDivElement {
         var sliderContainer = document.createElement("div");
         var slider = document.createElement("div");
+
+        var tooltip = document.createElement("div");
+        var tooltipArrow = document.createElement("div");
+        var tooltipInner = document.createElement("div");
+
+        var showSliderTip = () => {
+            $(tooltip).stop(true, true).show();
+        };
+        var hideSliderTip = () => {
+            $(tooltip).fadeOut(600);
+        }
+
         $(sliderContainer)
             .addClass("pagination-slider")
             .attr("style", "margin-top: 7px;")
@@ -158,10 +176,35 @@ class Pagination {
         $(slider).slider({
             min: 1,
             max: this.pageCount,
-            change: this.onSliderChange.bind(this)
+            change: this.onSliderChange.bind(this),
+            start: showSliderTip,
+            stop: hideSliderTip,
+            slide: (event, ui) => {
+                showSliderTip();
+                $(tooltipInner).text(ui.value);
+            }
         });
 
+        $(tooltip)
+            .addClass("tooltip")
+            .addClass("top")
+            .attr("style", "opacity: 1; width: 60px; bottom: 120%; margin-left: -23px;")
+            .append(tooltipArrow)
+            .append(tooltipInner)
+            .hide();
+
+        $(tooltipArrow).addClass("tooltip-arrow");
+        $(tooltipInner).addClass("tooltip-inner");
+
+        $(".ui-slider-handle", slider)
+            .css("outline-style", "none")
+            .css("outline-width", 0)
+            .append(tooltip)
+            .hover(showSliderTip)
+            .mouseout(hideSliderTip);
+
         this.sliderDiv = slider;
+        this.sliderTipDiv = tooltipInner;
         return sliderContainer;
     }
 
@@ -276,5 +319,6 @@ interface IPaginationOptions {
     maxVisibleElements?: number;
     showSlider?: boolean;
     showInput?: boolean;
+    inputTitle?: string;
     //isEnhancedMode?: boolean;
 }
