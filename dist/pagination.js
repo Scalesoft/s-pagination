@@ -3,9 +3,12 @@ var Pagination = (function () {
         this.usePaginationDots = false;
         this.options = options;
         this.paginationContainer = $(options.container);
-        this.maxPageElements = 9;
+        this.maxVisibleElements = 13;
         if (options.maxVisibleElements) {
-            this.maxPageElements = options.maxVisibleElements;
+            this.maxVisibleElements = options.maxVisibleElements;
+            if (this.maxVisibleElements % 2 === 0) {
+                this.maxVisibleElements--;
+            }
         }
     }
     Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber) {
@@ -41,22 +44,7 @@ var Pagination = (function () {
             .addClass("pagination-sm")
             .css("margin-bottom", "0")
             .css("margin-top", "7px");
-        var previousPageLi = this.createPageElement("&laquo;", "previous");
-        paginationUl.appendChild(previousPageLi);
-        for (var i = 1; i <= this.pageCount; i++) {
-            var pageLi = this.createPageElement(i.toString(), i);
-            if (i === defaultPageNumber) {
-                pageLi.classList.add("active");
-            }
-            paginationUl.appendChild(pageLi);
-        }
-        var nextPageLi = this.createPageElement("&raquo;", "next");
-        paginationUl.appendChild(nextPageLi);
-        this.usePaginationDots = this.pageCount > this.maxPageElements;
-        if (this.usePaginationDots) {
-            $(paginationUl.children[1]).after(this.createThreeDots());
-            $(paginationUl.children[this.pageCount]).after(this.createThreeDots());
-        }
+        this.paginationUl = paginationUl;
         return paginationUl;
     };
     Pagination.prototype.createPageElement = function (label, pageNumber) {
@@ -70,7 +58,7 @@ var Pagination = (function () {
         pageLi.appendChild(pageLink);
         return pageLi;
     };
-    Pagination.prototype.createThreeDots = function () {
+    Pagination.prototype.createDotsPageElement = function () {
         var element = document.createElement("li");
         $(element).addClass("disabled")
             .addClass("three-dots");
@@ -78,6 +66,60 @@ var Pagination = (function () {
         contentElement.innerHTML = "&hellip;";
         element.appendChild(contentElement);
         return element;
+    };
+    Pagination.prototype.recreatePageElements = function (pageNumber) {
+        var _this = this;
+        var $paginationUl = $(this.paginationUl);
+        var pageCount = this.pageCount;
+        var isEnhanced = this.options.isEnhancedMode; // TODO now ignored
+        var previousPageLi = this.createPageElement("&laquo;", "previous");
+        var nextPageLi = this.createPageElement("&raquo;", "next");
+        var createAndAppendPageElement = function (createPageNumber) {
+            var pageLi = _this.createPageElement(createPageNumber.toString(), createPageNumber);
+            if (createPageNumber === pageNumber) {
+                pageLi.classList.add("active");
+            }
+            $paginationUl.append(pageLi);
+        };
+        $paginationUl.empty();
+        if (pageCount <= this.maxVisibleElements - 2) {
+            $paginationUl.append(previousPageLi);
+            for (var i = 1; i <= pageCount; i++) {
+                createAndAppendPageElement(i);
+            }
+            $paginationUl.append(nextPageLi);
+            return;
+        }
+        var centerCount = this.maxVisibleElements - 6;
+        var sideCount = (centerCount - 1) / 2;
+        var centerLeftPage = pageNumber - sideCount;
+        var centerRightPage = pageNumber + sideCount;
+        var showDotsLeft = centerLeftPage - 1 > 1;
+        var showDotsRight = centerRightPage + 1 < pageCount;
+        if (centerLeftPage < 3) {
+            centerLeftPage = 2;
+            centerRightPage = centerLeftPage + centerCount;
+        }
+        if (centerRightPage > pageCount - 2) {
+            centerRightPage = pageCount - 1;
+            centerLeftPage = centerRightPage - centerCount;
+        }
+        $paginationUl.append(previousPageLi);
+        createAndAppendPageElement(1);
+        if (showDotsLeft) {
+            $paginationUl.append(this.createDotsPageElement());
+        }
+        for (var i = centerLeftPage; i <= centerRightPage; i++) {
+            createAndAppendPageElement(i);
+        }
+        if (showDotsRight) {
+            $paginationUl.append(this.createDotsPageElement());
+        }
+        createAndAppendPageElement(pageCount);
+        $paginationUl.append(nextPageLi);
+    };
+    Pagination.prototype.updateVisiblePageElements = function () {
+        this.recreatePageElements(this.currentPage);
     };
     Pagination.prototype.createPageInput = function () {
         var inputGroupDiv = document.createElement("div");
@@ -194,48 +236,6 @@ var Pagination = (function () {
     Pagination.prototype.onSliderChange = function (event, ui) {
         if (ui.value !== this.currentPage) {
             this.updateCurrentPage(ui.value);
-        }
-    };
-    Pagination.prototype.updateVisiblePageElements = function () {
-        if (!this.usePaginationDots)
-            return;
-        var pageNumber = this.currentPage;
-        var centerVisibleIndex = (this.maxPageElements - 1) / 2;
-        var paginationListUl = $(".pagination", this.paginationContainer).children();
-        for (var i = 2; i < paginationListUl.length - 2; i++) {
-            $(paginationListUl[i]).addClass("hidden");
-        }
-        var visibleInCenter = this.maxPageElements - 4; //two buttons on each side always visible
-        var leftDotsHidden = false;
-        var rightDotsHidden = false;
-        var threeDotsElements = $(".three-dots", this.paginationContainer);
-        threeDotsElements.addClass("hidden");
-        if (pageNumber > centerVisibleIndex) {
-            threeDotsElements.first().removeClass("hidden");
-            leftDotsHidden = true;
-        }
-        if (pageNumber < this.pageCount - centerVisibleIndex) {
-            threeDotsElements.last().removeClass("hidden");
-            rightDotsHidden = true;
-        }
-        if (!leftDotsHidden) {
-            for (var j = 0; j < visibleInCenter + 1; j++) {
-                $(paginationListUl[j + 3]).removeClass("hidden");
-            }
-        }
-        else if (!rightDotsHidden) {
-            for (var l = 0; l < visibleInCenter + 1; l++) {
-                $(paginationListUl[this.pageCount - l]).removeClass("hidden");
-            }
-        }
-        else {
-            var centerIndex = this.currentPage + 1;
-            $(paginationListUl[centerIndex]).removeClass("hidden");
-            var iterations = (visibleInCenter - 1) / 2;
-            for (var k = 1; k <= iterations; k++) {
-                $(paginationListUl[centerIndex - k]).removeClass("hidden");
-                $(paginationListUl[centerIndex + k]).removeClass("hidden");
-            }
         }
     };
     Pagination.prototype.goToPage = function (pageNumber) {

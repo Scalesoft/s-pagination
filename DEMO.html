@@ -63,8 +63,7 @@
 
         var pagination1 = new Pagination({
             container: $("#pagination-1"),
-            pageClickCallback: pageClick1,
-            maxVisibleElements: 9
+            pageClickCallback: pageClick1
         });
         pagination1.make(itemsCount, itemsOnPage);
 
@@ -75,7 +74,7 @@
             showInput: true,
             inputTitle: "Přejít na stranu"
         });
-        pagination2.make(itemsCount, itemsOnPage);
+        pagination2.make(90, itemsOnPage);
 
         var pagination3 = new Pagination({
             container: $("#pagination-3"),
@@ -83,7 +82,7 @@
             maxVisibleElements: 9,
             showSlider: true
         });
-        pagination3.make(itemsCount, itemsOnPage);
+        pagination3.make(11, itemsOnPage);
     });
 </script>
 </body>
