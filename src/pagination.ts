@@ -1,32 +1,68 @@
 class Pagination {
-    private pageClickCallback: (pageNumber: number) => void;
-    private paginationContainer: string;
+    private options: IPaginationOptions;
+    private paginationContainer: JQuery;
     private maxPageElements: number;
     private pageCount: number;
     private currentPage: number;
     private usePaginationDots = false;
+    private goToPageInput: HTMLInputElement;
 
-    constructor(paginationContainer: string, maxVisiblePageElements = 9) {
-        this.maxPageElements = maxVisiblePageElements;
-        this.paginationContainer = paginationContainer;
+    constructor(options: IPaginationOptions) {
+        this.options = options;
+        this.paginationContainer = $(options.container);
+
+        this.maxPageElements = 9;
+        if (options.maxVisibleElements) {
+            this.maxPageElements = options.maxVisibleElements;
+        }
     }
 
-    public createPagination(itemsCount: number, itemsOnPage: number, pageClickCallback: (pageNumber: number) => void, defaultPageNumber: number = 1) {
+    public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1) {
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
-        this.pageClickCallback = pageClickCallback;
         
-        $(this.paginationContainer).empty();
+        this.paginationContainer.empty();
 
+        var $innerContainer = $(document.createElement("div"));
+        $innerContainer.attr("style", "display: inline-block;");
+
+        //TODO slider
+
+        $innerContainer.append(this.createPageList(defaultPageNumber));
+
+        if (this.options.showInput) {
+            $innerContainer.append(this.createPageInput());
+        }
+        
+        this.paginationContainer.append($innerContainer);
+
+        this.updateCurrentPage(defaultPageNumber);
+    }
+
+    private updateCurrentPage(newPageNumber: number) {
+        $("li.active", this.paginationContainer).removeClass("active");
+        $(`li [data-page-number=${newPageNumber}]`, this.paginationContainer).closest("li").addClass("active");
+
+        this.currentPage = newPageNumber;
+        this.updateVisiblePageElements();
+
+        $(this.goToPageInput).val(newPageNumber);
+
+        this.options.pageClickCallback(newPageNumber);
+    }
+
+    private createPageList(defaultPageNumber: number): HTMLUListElement {
         var paginationUl = document.createElement("ul");
-        $(paginationUl).addClass("pagination")
-            .addClass("pagination-sm");
+        $(paginationUl)
+            .addClass("pagination")
+            .addClass("pagination-sm")
+            .css("margin-bottom", "0");
 
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
 
         for (let i = 1; i <= this.pageCount; i++) {
             const pageLi = this.createPageElement(i.toString(), i);
-            if (i == defaultPageNumber) {
+            if (i === defaultPageNumber) {
                 pageLi.classList.add("active");
             }
             paginationUl.appendChild(pageLi);
@@ -41,47 +77,17 @@ class Pagination {
             $(paginationUl.children[this.pageCount]).after(this.createThreeDots());
         }
 
-        $(this.paginationContainer).append(paginationUl);
-
-        this.updateCurrentPage(defaultPageNumber);
-    }
-
-    private updateCurrentPage(newPageNumber: number) {
-        this.getCurrentPageElement().removeClass("active");
-        this.currentPage = newPageNumber;
-        this.getCurrentPageElement().addClass("active");
-        this.updateVisiblePageElements();
-
-        this.pageClickCallback(newPageNumber);
+        return paginationUl;
     }
 
     private createPageElement(label: string, pageNumber: any): HTMLLIElement {
         var pageLi = document.createElement("li");
         var pageLink = document.createElement("a");
-        pageLink.innerHTML = label;
-        pageLink.href = "#";
-        pageLink.setAttribute("data-page-number", pageNumber);
-
-        $(pageLink).click(event => {
-            event.preventDefault();
-            var pageValue = $(event.target).data("page-number");
-            var pageNumber: number;
-            switch (pageValue) {
-            case "previous":
-                pageNumber = this.currentPage - 1;
-                break;
-            case "next":
-                pageNumber = this.currentPage + 1;
-                break;
-            default:
-                pageNumber = Number(pageValue);
-                break;
-            }
-
-            if (pageNumber > 0 && pageNumber <= this.pageCount) {
-                this.updateCurrentPage(pageNumber);
-            }
-        });
+        $(pageLink)
+            .html(label)
+            .attr("href", "#")
+            .attr("data-page-number", pageNumber)
+            .click(this.onPageClick.bind(this));
 
         pageLi.appendChild(pageLink);
         return pageLi;
@@ -99,18 +105,87 @@ class Pagination {
         return element;
     }
 
-    private getCurrentPageElement(): JQuery {
-        var selector = "li:has(*[data-page-number=\"" + this.currentPage + "\"])";
-        return $(selector);
+    private createPageInput(): HTMLDivElement {
+        var inputGroupDiv = document.createElement("div");
+        var inputGroupButtonSpan = document.createElement("span");
+        var goToPageInput = document.createElement("input");
+        var goToPageButton = document.createElement("button");
+        var goToPageIcon = document.createElement("span");
+        
+        $(inputGroupDiv)
+            .addClass("input-group")
+            .addClass("input-group-sm")
+            .addClass("pagination-input")
+            .attr("style", "width: 120px; margin-left: auto; margin-right: auto;")
+            .append(goToPageInput)
+            .append(inputGroupButtonSpan);
+
+        $(goToPageInput)
+            .attr("type", "text")
+            .addClass("form-control")
+            .keypress(this.onGoToInputKeyPress.bind(this));
+
+        $(inputGroupButtonSpan)
+            .addClass("input-group-btn")
+            .append(goToPageButton);
+
+        $(goToPageButton)
+            .attr("type", "button")
+            .addClass("btn")
+            .addClass("btn-default")
+            .append(goToPageIcon)
+            .click(this.onGoToPageClick.bind(this));
+
+        $(goToPageIcon)
+            .addClass("glyphicon")
+            .addClass("glyphicon-arrow-right");
+
+        this.goToPageInput = goToPageInput;
+        return inputGroupDiv;
     }
 
+    private onPageClick(event: JQueryEventObject) {
+        event.preventDefault();
+        var pageValue = $(event.target).data("page-number");
+        var pageNumber: number;
+        switch (pageValue) {
+            case "previous":
+                pageNumber = this.currentPage - 1;
+                break;
+            case "next":
+                pageNumber = this.currentPage + 1;
+                break;
+            default:
+                pageNumber = Number(pageValue);
+                break;
+        }
+
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
+        }
+    }
+
+    private onGoToPageClick() {
+        var pageNumberData = $(this.goToPageInput).val();
+        var pageNumber = Number(pageNumberData);
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
+        }
+    }
+
+    private onGoToInputKeyPress(event: JQueryEventObject) {
+        if (event.keyCode === 13) {
+            this.onGoToPageClick();
+        }
+    }
+    
     private updateVisiblePageElements() {
         if (!this.usePaginationDots)
             return;
 
         var pageNumber = this.currentPage;
         var centerVisibleIndex = (this.maxPageElements - 1) / 2;
-        var paginationListUl = $(this.paginationContainer).children().children();
+        var paginationListUl = $(".pagination", this.paginationContainer).children();
         for (var i = 2; i < paginationListUl.length - 2; i++) {
             $(paginationListUl[i]).addClass("hidden");
         }
@@ -119,7 +194,7 @@ class Pagination {
 
         var leftDotsHidden = false;
         var rightDotsHidden = false;
-        var threeDotsElements = $(".three-dots");
+        var threeDotsElements = $(".three-dots", this.paginationContainer);
         threeDotsElements.addClass("hidden");
 
         if (pageNumber > centerVisibleIndex) {
@@ -166,4 +241,13 @@ class Pagination {
     public getCurrentPage(): number {
         return this.currentPage;
     }
+}
+
+interface IPaginationOptions {
+    container: HTMLDivElement | JQuery;
+    pageClickCallback: (pageNumber: number) => void;
+    maxVisibleElements?: number;
+    //showSlider?: boolean;
+    showInput?: boolean;
+    //isEnhancedMode?: boolean;
 }

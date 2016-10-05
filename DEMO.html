@@ -12,22 +12,50 @@
 <h1>Pagination DEMO</h1>
 
 <div id="content">
-    <span>Current page:</span>
-    <span id="page-number-1"></span>
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-1"></span>
+
+        <div id="pagination-1"></div>
+    </div>
+    <hr/>
     
-    <div id="pagination-1"></div>
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-2"></span>
+
+        <div id="pagination-2"></div>
+    </div>
+    <hr />
 </div>
     
 <script>
-    $(document).ready(function() {
-        var maxVisibleElements = 9;
-        var pagination = new Pagination("#pagination-1", maxVisibleElements);
+    function pageClick1(pageNumber) {
+        $("#page-number-1").text(pageNumber);
+    }
 
+    function pageClick2(pageNumber) {
+        $("#page-number-2").text(pageNumber);
+    }
+
+    $(document).ready(function () {
         var itemsCount = 299;
         var itemsOnPage = 10;
-        pagination.createPagination(itemsCount, itemsOnPage, function(pageNumber) {
-            $("#page-number-1").text(pageNumber);
+
+        var pagination1 = new Pagination({
+            container: $("#pagination-1"),
+            pageClickCallback: pageClick1,
+            maxVisibleElements: 9
         });
+        pagination1.make(itemsCount, itemsOnPage);
+
+        var pagination2 = new Pagination({
+            container: $("#pagination-2"),
+            pageClickCallback: pageClick2,
+            maxVisibleElements: 9,
+            showInput: true
+        });
+        pagination2.make(itemsCount, itemsOnPage);
     });
 </script>
 </body>

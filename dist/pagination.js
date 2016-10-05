@@ -1,23 +1,46 @@
 var Pagination = (function () {
-    function Pagination(paginationContainer, maxVisiblePageElements) {
-        if (maxVisiblePageElements === void 0) { maxVisiblePageElements = 9; }
+    function Pagination(options) {
         this.usePaginationDots = false;
-        this.maxPageElements = maxVisiblePageElements;
-        this.paginationContainer = paginationContainer;
+        this.options = options;
+        this.paginationContainer = $(options.container);
+        this.maxPageElements = 9;
+        if (options.maxVisibleElements) {
+            this.maxPageElements = options.maxVisibleElements;
+        }
     }
-    Pagination.prototype.createPagination = function (itemsCount, itemsOnPage, pageClickCallback, defaultPageNumber) {
+    Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber) {
         if (defaultPageNumber === void 0) { defaultPageNumber = 1; }
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
-        this.pageClickCallback = pageClickCallback;
-        $(this.paginationContainer).empty();
+        this.paginationContainer.empty();
+        var $innerContainer = $(document.createElement("div"));
+        $innerContainer.attr("style", "display: inline-block;");
+        //TODO slider
+        $innerContainer.append(this.createPageList(defaultPageNumber));
+        if (this.options.showInput) {
+            $innerContainer.append(this.createPageInput());
+        }
+        this.paginationContainer.append($innerContainer);
+        this.updateCurrentPage(defaultPageNumber);
+    };
+    Pagination.prototype.updateCurrentPage = function (newPageNumber) {
+        $("li.active", this.paginationContainer).removeClass("active");
+        $("li [data-page-number=" + newPageNumber + "]", this.paginationContainer).closest("li").addClass("active");
+        this.currentPage = newPageNumber;
+        this.updateVisiblePageElements();
+        $(this.goToPageInput).val(newPageNumber);
+        this.options.pageClickCallback(newPageNumber);
+    };
+    Pagination.prototype.createPageList = function (defaultPageNumber) {
         var paginationUl = document.createElement("ul");
-        $(paginationUl).addClass("pagination")
-            .addClass("pagination-sm");
+        $(paginationUl)
+            .addClass("pagination")
+            .addClass("pagination-sm")
+            .css("margin-bottom", "0");
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         paginationUl.appendChild(previousPageLi);
         for (var i = 1; i <= this.pageCount; i++) {
             var pageLi = this.createPageElement(i.toString(), i);
-            if (i == defaultPageNumber) {
+            if (i === defaultPageNumber) {
                 pageLi.classList.add("active");
             }
             paginationUl.appendChild(pageLi);
@@ -29,42 +52,16 @@ var Pagination = (function () {
             $(paginationUl.children[1]).after(this.createThreeDots());
             $(paginationUl.children[this.pageCount]).after(this.createThreeDots());
         }
-        $(this.paginationContainer).append(paginationUl);
-        this.updateCurrentPage(defaultPageNumber);
-    };
-    Pagination.prototype.updateCurrentPage = function (newPageNumber) {
-        this.getCurrentPageElement().removeClass("active");
-        this.currentPage = newPageNumber;
-        this.getCurrentPageElement().addClass("active");
-        this.updateVisiblePageElements();
-        this.pageClickCallback(newPageNumber);
+        return paginationUl;
     };
     Pagination.prototype.createPageElement = function (label, pageNumber) {
-        var _this = this;
         var pageLi = document.createElement("li");
         var pageLink = document.createElement("a");
-        pageLink.innerHTML = label;
-        pageLink.href = "#";
-        pageLink.setAttribute("data-page-number", pageNumber);
-        $(pageLink).click(function (event) {
-            event.preventDefault();
-            var pageValue = $(event.target).data("page-number");
-            var pageNumber;
-            switch (pageValue) {
-                case "previous":
-                    pageNumber = _this.currentPage - 1;
-                    break;
-                case "next":
-                    pageNumber = _this.currentPage + 1;
-                    break;
-                default:
-                    pageNumber = Number(pageValue);
-                    break;
-            }
-            if (pageNumber > 0 && pageNumber <= _this.pageCount) {
-                _this.updateCurrentPage(pageNumber);
-            }
-        });
+        $(pageLink)
+            .html(label)
+            .attr("href", "#")
+            .attr("data-page-number", pageNumber)
+            .click(this.onPageClick.bind(this));
         pageLi.appendChild(pageLink);
         return pageLi;
     };
@@ -77,23 +74,82 @@ var Pagination = (function () {
         element.appendChild(contentElement);
         return element;
     };
-    Pagination.prototype.getCurrentPageElement = function () {
-        var selector = "li:has(*[data-page-number=\"" + this.currentPage + "\"])";
-        return $(selector);
+    Pagination.prototype.createPageInput = function () {
+        var inputGroupDiv = document.createElement("div");
+        var inputGroupButtonSpan = document.createElement("span");
+        var goToPageInput = document.createElement("input");
+        var goToPageButton = document.createElement("button");
+        var goToPageIcon = document.createElement("span");
+        $(inputGroupDiv)
+            .addClass("input-group")
+            .addClass("input-group-sm")
+            .addClass("pagination-input")
+            .attr("style", "width: 120px; margin-left: auto; margin-right: auto;")
+            .append(goToPageInput)
+            .append(inputGroupButtonSpan);
+        $(goToPageInput)
+            .attr("type", "text")
+            .addClass("form-control")
+            .keypress(this.onGoToInputKeyPress.bind(this));
+        $(inputGroupButtonSpan)
+            .addClass("input-group-btn")
+            .append(goToPageButton);
+        $(goToPageButton)
+            .attr("type", "button")
+            .addClass("btn")
+            .addClass("btn-default")
+            .append(goToPageIcon)
+            .click(this.onGoToPageClick.bind(this));
+        $(goToPageIcon)
+            .addClass("glyphicon")
+            .addClass("glyphicon-arrow-right");
+        this.goToPageInput = goToPageInput;
+        return inputGroupDiv;
+    };
+    Pagination.prototype.onPageClick = function (event) {
+        event.preventDefault();
+        var pageValue = $(event.target).data("page-number");
+        var pageNumber;
+        switch (pageValue) {
+            case "previous":
+                pageNumber = this.currentPage - 1;
+                break;
+            case "next":
+                pageNumber = this.currentPage + 1;
+                break;
+            default:
+                pageNumber = Number(pageValue);
+                break;
+        }
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
+        }
+    };
+    Pagination.prototype.onGoToPageClick = function () {
+        var pageNumberData = $(this.goToPageInput).val();
+        var pageNumber = Number(pageNumberData);
+        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+            this.updateCurrentPage(pageNumber);
+        }
+    };
+    Pagination.prototype.onGoToInputKeyPress = function (event) {
+        if (event.keyCode === 13) {
+            this.onGoToPageClick();
+        }
     };
     Pagination.prototype.updateVisiblePageElements = function () {
         if (!this.usePaginationDots)
             return;
         var pageNumber = this.currentPage;
         var centerVisibleIndex = (this.maxPageElements - 1) / 2;
-        var paginationListUl = $(this.paginationContainer).children().children();
+        var paginationListUl = $(".pagination", this.paginationContainer).children();
         for (var i = 2; i < paginationListUl.length - 2; i++) {
             $(paginationListUl[i]).addClass("hidden");
         }
         var visibleInCenter = this.maxPageElements - 4; //two buttons on each side always visible
         var leftDotsHidden = false;
         var rightDotsHidden = false;
-        var threeDotsElements = $(".three-dots");
+        var threeDotsElements = $(".three-dots", this.paginationContainer);
         threeDotsElements.addClass("hidden");
         if (pageNumber > centerVisibleIndex) {
             threeDotsElements.first().removeClass("hidden");
