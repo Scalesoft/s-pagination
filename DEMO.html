@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Pagination DEMO</title>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="dist/pagination.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+</head>
+<body>
+<h1>Pagination DEMO</h1>
+
+<div id="content">
+    <span>Current page:</span>
+    <span id="page-number-1"></span>
+    
+    <div id="pagination-1"></div>
+</div>
+    
+<script>
+    $(document).ready(function() {
+        var maxVisibleElements = 9;
+        var pagination = new Pagination("#pagination-1", maxVisibleElements);
+
+        var itemsCount = 299;
+        var itemsOnPage = 10;
+        pagination.createPagination(itemsCount, itemsOnPage, function(pageNumber) {
+            $("#page-number-1").text(pageNumber);
+        });
+    });
+</script>
+</body>
+</html>

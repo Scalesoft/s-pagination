@@ -1,0 +1,11 @@
+{
+  "name": "pagination",
+  "private": true,
+  "license": "MIT",
+  "authors": [ "Scalesoft s.r.o." ],
+  "main": "dist/pagination.js",
+  "dependencies": {
+    "jquery": ">= 2.0.0",
+    "bootstrap": ">= 3.0.0"
+  }
+}
