@@ -42,6 +42,22 @@
         <div id="pagination-3"></div>
     </div>
     <hr />
+    
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-4"></span>
+
+        <div id="pagination-4"></div>
+    </div>
+    <hr />
+    
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-all"></span>
+
+        <div id="pagination-all"></div>
+    </div>
+    <hr />
 </div>
     
 <script>
@@ -57,8 +73,16 @@
         $("#page-number-3").text(pageNumber);
     }
 
+    function pageClick4(pageNumber) {
+        $("#page-number-4").text(pageNumber);
+    }
+
+    function pageClickAll(pageNumber) {
+        $("#page-number-all").text(pageNumber);
+    }
+
     $(document).ready(function () {
-        var itemsCount = 299;
+        var itemsCount = 300;
         var itemsOnPage = 10;
 
         var pagination1 = new Pagination({
@@ -72,9 +96,9 @@
             pageClickCallback: pageClick2,
             maxVisibleElements: 9,
             showInput: true,
-            inputTitle: "Přejít na stranu"
+            inputTitle: "Go to page"
         });
-        pagination2.make(90, itemsOnPage);
+        pagination2.make(itemsCount, itemsOnPage);
 
         var pagination3 = new Pagination({
             container: $("#pagination-3"),
@@ -82,7 +106,25 @@
             maxVisibleElements: 9,
             showSlider: true
         });
-        pagination3.make(11, itemsOnPage);
+        pagination3.make(itemsCount, itemsOnPage);
+
+        var pagination4 = new Pagination({
+            container: $("#pagination-4"),
+            pageClickCallback: pageClick4,
+            isEnhancedMode: true
+        });
+        pagination4.make(itemsCount, itemsOnPage);
+
+        var paginationAll = new Pagination({
+            container: $("#pagination-all"),
+            pageClickCallback: pageClickAll,
+            showInput: true,
+            showSlider: true,
+            isEnhancedMode: true,
+            maxVisibleElements: 20,
+            inputTitle: "Go to page"
+        });
+        paginationAll.make(itemsCount, itemsOnPage);
     });
 </script>
 </body>

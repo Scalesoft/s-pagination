@@ -20,6 +20,11 @@ class Pagination {
             if (this.maxVisibleElements % 2 === 0) {
                 this.maxVisibleElements--;
             }
+
+            var enhancementCorrection = this.options.isEnhancedMode ? 4 : 0;
+            if (this.maxVisibleElements - enhancementCorrection < 7) {
+                this.maxVisibleElements = 7 + enhancementCorrection;
+            }
         }
     }
 
@@ -98,7 +103,7 @@ class Pagination {
     private recreatePageElements(pageNumber: number) {
         var $paginationUl = $(this.paginationUl);
         var pageCount = this.pageCount;
-        var isEnhanced = this.options.isEnhancedMode; // TODO now ignored
+        var isEnhanced = this.options.isEnhancedMode;
 
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         var nextPageLi = this.createPageElement("&raquo;", "next");
@@ -144,8 +149,24 @@ class Pagination {
         if (showDotsLeft) {
             $paginationUl.append(this.createDotsPageElement());
         }
+        var isRightEnhancement = false;
+        if (isEnhanced) {
+            if (centerLeftPage >= 5) {
+                createAndAppendPageElement(Math.ceil((centerLeftPage + 3) / 2));
+                $paginationUl.append(this.createDotsPageElement());
+                centerLeftPage += 2;
+            }
+            if (centerRightPage <= pageCount - 4) {
+                centerRightPage -= 2;
+                isRightEnhancement = true;
+            }
+        }
         for (let i = centerLeftPage; i <= centerRightPage; i++) {
             createAndAppendPageElement(i);
+        }
+        if (isRightEnhancement) {
+            $paginationUl.append(this.createDotsPageElement());
+            createAndAppendPageElement(Math.floor((centerRightPage + pageCount) / 2));
         }
         if (showDotsRight) {
             $paginationUl.append(this.createDotsPageElement());
@@ -170,7 +191,7 @@ class Pagination {
             .addClass("input-group")
             .addClass("input-group-sm")
             .addClass("pagination-input")
-            .attr("style", "width: 120px; margin-left: auto; margin-right: auto;")
+            .attr("style", "width: 95px; margin-left: auto; margin-right: auto;")
             .append(goToPageInput)
             .append(inputGroupButtonSpan);
 
