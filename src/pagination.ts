@@ -21,7 +21,7 @@ class Pagination {
                 this.maxVisibleElements--;
             }
 
-            var enhancementCorrection = this.options.isEnhancedMode ? 4 : 0;
+            var enhancementCorrection = this.options.enhancedMode ? 4 : 0;
             if (this.maxVisibleElements - enhancementCorrection < 7) {
                 this.maxVisibleElements = 7 + enhancementCorrection;
             }
@@ -39,7 +39,7 @@ class Pagination {
         if (this.options.showSlider) {
             $innerContainer.append(this.createSlider());
         }
-        $innerContainer.append(this.createPageList(defaultPageNumber));
+        $innerContainer.append(this.createPageList());
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
         }
@@ -63,7 +63,7 @@ class Pagination {
         this.options.pageClickCallback(newPageNumber);
     }
 
-    private createPageList(defaultPageNumber: number): HTMLUListElement {
+    private createPageList(): HTMLUListElement {
         var paginationUl = document.createElement("ul");
         $(paginationUl)
             .addClass("pagination")
@@ -88,7 +88,8 @@ class Pagination {
 
     private createDotsPageElement(): HTMLLIElement {
         var element = document.createElement("li");
-        $(element).addClass("disabled")
+        $(element)
+            .addClass("disabled")
             .addClass("three-dots");
 
         var contentElement = document.createElement("span");
@@ -101,7 +102,7 @@ class Pagination {
     private recreatePageElements(pageNumber: number) {
         var $paginationUl = $(this.paginationUl);
         var pageCount = this.pageCount;
-        var isEnhanced = this.options.isEnhancedMode;
+        var isEnhanced = this.options.enhancedMode;
 
         var previousPageLi = this.createPageElement("&laquo;", "previous");
         var nextPageLi = this.createPageElement("&raquo;", "next");
@@ -297,9 +298,7 @@ class Pagination {
     private onGoToPageClick() {
         var pageNumberData = $(this.goToPageInput).val();
         var pageNumber = Number(pageNumberData);
-        if (pageNumber > 0 && pageNumber <= this.pageCount) {
-            this.updateCurrentPage(pageNumber);
-        }
+        this.goToPage(pageNumber);
     }
 
     private onGoToInputKeyPress(event: JQueryEventObject) {
@@ -315,7 +314,11 @@ class Pagination {
     }
     
     public goToPage(pageNumber: number) {
-        if (pageNumber > 0 && pageNumber <= this.pageCount) {
+        if (pageNumber < 1) {
+            this.updateCurrentPage(1);
+        } else if (pageNumber > this.pageCount) {
+            this.updateCurrentPage(this.pageCount);
+        } else {
             this.updateCurrentPage(pageNumber);
         }
     }
@@ -336,5 +339,5 @@ interface IPaginationOptions {
     showSlider?: boolean;
     showInput?: boolean;
     inputTitle?: string;
-    isEnhancedMode?: boolean;
+    enhancedMode?: boolean;
 }
