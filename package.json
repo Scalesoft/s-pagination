@@ -1,13 +1,22 @@
 {
   "version": "0.2.0",
-  "name": "pagination",
-  "private": true,
+  "name": "pagination-scalesoft",
+  "description": "A jQuery library for pagination with slider support using Bootstrap and jQueryUI components.",
   "license": "MIT",
   "author": "Scalesoft s.r.o.",
   "main": "dist/pagination.js",
+  "keywords": [
+    "pagination",
+    "pager",
+    "slider"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Scalesoft/pagination.git"
+  },
   "devDependencies": {
     "bower": "1.7.9",
-    "typescript": "2.0.3", 
+    "typescript": "2.0.3",
     "gulp": "3.9.1",
     "gulp-typescript": "3.0.2",
     "gulp-sourcemaps": "1.6.0",
