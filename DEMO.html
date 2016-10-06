@@ -59,6 +59,14 @@
         <div id="pagination-all"></div>
     </div>
     <hr />
+    
+    <div>
+        <span>Current page:</span>
+        <span id="page-number-5"></span>
+
+        <div id="pagination-5"></div>
+    </div>
+    <hr />
 </div>
     
 <script>
@@ -80,6 +88,10 @@
 
     function pageClickAll(pageNumber) {
         $("#page-number-all").text(pageNumber);
+    }
+
+    function pageClick5(pageNumber) {
+        $("#page-number-5").text(pageNumber);
     }
 
     $(document).ready(function () {
@@ -126,6 +138,28 @@
             inputTitle: "Go to page"
         });
         paginationAll.make(itemsCount, itemsOnPage);
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        var pagination5 = new Pagination({
+            container: $("#pagination-5"),
+            pageClickUrl: "?page={{page}}",
+            //pageClickUrl: function(num) { return "?page=" + num; },
+            showInput: true,
+            showSlider: true,
+            enhancedMode: true,
+            maxVisibleElements: 20,
+            inputTitle: "Go to page"
+        });
+        pagination5.make(itemsCount, itemsOnPage, getParameterByName("page"));
     });
 </script>
 </body>

@@ -1,5 +1,5 @@
 {
-  "version": "0.2.0",
+  "version": "1.0.0",
   "name": "pagination-scalesoft",
   "description": "A jQuery library for pagination with slider support using Bootstrap and jQueryUI components.",
   "license": "MIT",

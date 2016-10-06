@@ -29,6 +29,11 @@ class Pagination {
     }
 
     public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1) {
+        defaultPageNumber = Number(defaultPageNumber);
+        if (!defaultPageNumber) {
+            defaultPageNumber = 1;
+        }
+
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
         
         this.paginationContainer.empty();
@@ -50,9 +55,6 @@ class Pagination {
     }
 
     private updateCurrentPage(newPageNumber: number) {
-        $("li.active", this.paginationContainer).removeClass("active");
-        $(`li [data-page-number=${newPageNumber}]`, this.paginationContainer).closest("li").addClass("active");
-
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
 
@@ -60,7 +62,9 @@ class Pagination {
         $(this.sliderDiv).slider("value", newPageNumber);
         $(this.sliderTipDiv).text(newPageNumber);
 
-        this.options.pageClickCallback(newPageNumber);
+        if (this.options.pageClickCallback) {
+            this.options.pageClickCallback(newPageNumber);
+        }
     }
 
     private createPageList(): HTMLUListElement {
@@ -78,9 +82,17 @@ class Pagination {
         var pageLink = document.createElement("a");
         $(pageLink)
             .html(label)
-            .attr("href", "#")
-            .attr("data-page-number", pageNumber)
-            .click(this.onPageClick.bind(this));
+            .attr("data-page-number", pageNumber);
+
+        var pageClickUrl = this.options.pageClickUrl;
+        if (pageClickUrl) {
+            var url= this.createPageClickUrl(pageNumber);
+            $(pageLink).attr("href", url);
+        } else {
+            $(pageLink)
+                .attr("href", "#")
+                .click(this.onPageClick.bind(this));
+        }
 
         pageLi.appendChild(pageLink);
         return pageLi;
@@ -104,8 +116,10 @@ class Pagination {
         var pageCount = this.pageCount;
         var isEnhanced = this.options.enhancedMode;
 
-        var previousPageLi = this.createPageElement("&laquo;", "previous");
-        var nextPageLi = this.createPageElement("&raquo;", "next");
+        var previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
+        var nextPage = pageNumber < pageCount ? pageNumber + 1 : pageCount;
+        var previousPageLi = this.createPageElement("&laquo;", previousPage);
+        var nextPageLi = this.createPageElement("&raquo;", nextPage);
         var createAndAppendPageElement = (createPageNumber: number) => {
             const pageLi = this.createPageElement(createPageNumber.toString(), createPageNumber);
             if (createPageNumber === pageNumber) {
@@ -277,22 +291,9 @@ class Pagination {
     private onPageClick(event: JQueryEventObject) {
         event.preventDefault();
         var pageValue = $(event.target).data("page-number");
-        var pageNumber: number;
-        switch (pageValue) {
-            case "previous":
-                pageNumber = this.currentPage - 1;
-                break;
-            case "next":
-                pageNumber = this.currentPage + 1;
-                break;
-            default:
-                pageNumber = Number(pageValue);
-                break;
-        }
+        var pageNumber = Number(pageValue);
 
-        if (pageNumber > 0 && pageNumber <= this.pageCount) {
-            this.updateCurrentPage(pageNumber);
-        }
+        this.goToPage(pageNumber);
     }
 
     private onGoToPageClick() {
@@ -309,15 +310,32 @@ class Pagination {
 
     private onSliderChange(event: Event, ui: JQueryUI.SliderUIParams) {
         if (ui.value !== this.currentPage) {
-            this.updateCurrentPage(ui.value);
+            this.goToPage(ui.value);
         }
     }
-    
+
+    private createPageClickUrl(pageNumber: number): string {
+        var pageClickUrl = this.options.pageClickUrl;
+        switch (typeof pageClickUrl) {
+            case "function":
+                return (pageClickUrl as (x) => string)(pageNumber);
+            case "string":
+                return (pageClickUrl as string).replace("{{page}}", pageNumber.toString());
+            default:
+                return "#";
+        }
+    }
+
     public goToPage(pageNumber: number) {
         if (pageNumber < 1) {
-            this.updateCurrentPage(1);
+            pageNumber = 1;
         } else if (pageNumber > this.pageCount) {
-            this.updateCurrentPage(this.pageCount);
+            pageNumber = this.pageCount;
+        }
+
+        if (this.options.pageClickUrl) {
+            var url = this.createPageClickUrl(pageNumber);
+            window.location.href = url;
         } else {
             this.updateCurrentPage(pageNumber);
         }
@@ -335,6 +353,7 @@ class Pagination {
 interface IPaginationOptions {
     container: HTMLDivElement | JQuery;
     pageClickCallback: (pageNumber: number) => void;
+    pageClickUrl: string|((pageNumber: number) => string);
     maxVisibleElements?: number;
     showSlider?: boolean;
     showInput?: boolean;
