@@ -1,0 +1,30 @@
+.pagination-container {
+    display: inline-block;
+}
+
+.pagination-container ul {
+    margin-top: 7px;
+    margin-bottom: 0;
+}
+
+.pagination-input {
+    width: 95px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pagination-slider {
+    margin-top: 7px;
+}
+
+.pagination-slider-handle {
+    outline-style: none;
+    outline-width: 0;
+}
+
+.pagination-tooltip {
+    opacity: 1;
+    width: 60px;
+    bottom: 120%;
+    margin-left: -23px;
+}

@@ -34,7 +34,7 @@ class Pagination {
         this.paginationContainer.empty();
 
         var $innerContainer = $(document.createElement("div"));
-        $innerContainer.attr("style", "display: inline-block;");
+        $innerContainer.addClass("pagination-container");
 
         if (this.options.showSlider) {
             $innerContainer.append(this.createSlider());
@@ -67,9 +67,7 @@ class Pagination {
         var paginationUl = document.createElement("ul");
         $(paginationUl)
             .addClass("pagination")
-            .addClass("pagination-sm")
-            .css("margin-bottom", "0")
-            .css("margin-top", "7px");
+            .addClass("pagination-sm");
 
         this.paginationUl = paginationUl;
         return paginationUl;
@@ -191,7 +189,6 @@ class Pagination {
             .addClass("input-group")
             .addClass("input-group-sm")
             .addClass("pagination-input")
-            .attr("style", "width: 95px; margin-left: auto; margin-right: auto;")
             .append(goToPageInput)
             .append(inputGroupButtonSpan);
 
@@ -240,7 +237,6 @@ class Pagination {
 
         $(sliderContainer)
             .addClass("pagination-slider")
-            .attr("style", "margin-top: 7px;")
             .append(slider);
 
         $(slider).slider({
@@ -258,7 +254,7 @@ class Pagination {
         $(tooltip)
             .addClass("tooltip")
             .addClass("top")
-            .attr("style", "opacity: 1; width: 60px; bottom: 120%; margin-left: -23px;")
+            .addClass("pagination-tooltip")
             .append(tooltipArrow)
             .append(tooltipInner)
             .hide();
@@ -267,8 +263,7 @@ class Pagination {
         $(tooltipInner).addClass("tooltip-inner");
 
         $(".ui-slider-handle", slider)
-            .css("outline-style", "none")
-            .css("outline-width", 0)
+            .addClass("pagination-slider-handle")
             .append(tooltip)
             .hover(showSliderTip)
             .mouseout(hideSliderTip);
