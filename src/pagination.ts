@@ -1,5 +1,5 @@
 class Pagination {
-    private options: IPaginationOptions;
+    private options: Pagination.Options;
     private paginationContainer: JQuery;
     private maxVisibleElements: number;
     private pageCount: number;
@@ -10,7 +10,7 @@ class Pagination {
     private sliderDiv: HTMLDivElement;
     private sliderTipDiv: HTMLDivElement;
 
-    constructor(options: IPaginationOptions) {
+    constructor(options: Pagination.Options) {
         this.options = options;
         this.paginationContainer = $(options.container);
 
@@ -35,7 +35,7 @@ class Pagination {
         }
 
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
-        
+
         this.paginationContainer.empty();
 
         var $innerContainer = $(document.createElement("div"));
@@ -48,7 +48,7 @@ class Pagination {
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
         }
-        
+
         this.paginationContainer.append($innerContainer);
 
         this.updateCurrentPage(defaultPageNumber);
@@ -86,7 +86,7 @@ class Pagination {
 
         var pageClickUrl = this.options.pageClickUrl;
         if (pageClickUrl) {
-            var url= this.createPageClickUrl(pageNumber);
+            var url = this.createPageClickUrl(pageNumber);
             $(pageLink).attr("href", url);
         } else {
             $(pageLink)
@@ -129,7 +129,7 @@ class Pagination {
         };
 
         $paginationUl.empty();
-            
+
         if (pageCount <= this.maxVisibleElements - 2) {
             $paginationUl.append(previousPageLi);
             for (let i = 1; i <= pageCount; i++) {
@@ -138,7 +138,7 @@ class Pagination {
             $paginationUl.append(nextPageLi);
             return;
         }
-        
+
         var centerCount = this.maxVisibleElements - 6;
         var sideCount = (centerCount - 1) / 2;
         var centerLeftPage = pageNumber - sideCount;
@@ -184,7 +184,7 @@ class Pagination {
         if (showDotsRight) {
             $paginationUl.append(this.createDotsPageElement());
         }
-        
+
         createAndAppendPageElement(pageCount);
         $paginationUl.append(nextPageLi);
     }
@@ -199,7 +199,7 @@ class Pagination {
         var goToPageInput = document.createElement("input");
         var goToPageButton = document.createElement("button");
         var goToPageIcon = document.createElement("span");
-        
+
         $(inputGroupDiv)
             .addClass("input-group")
             .addClass("input-group-sm")
@@ -348,15 +348,4 @@ class Pagination {
     public getCurrentPage(): number {
         return this.currentPage;
     }
-}
-
-interface IPaginationOptions {
-    container: HTMLDivElement | JQuery;
-    pageClickCallback: (pageNumber: number) => void;
-    pageClickUrl: string|((pageNumber: number) => string);
-    maxVisibleElements?: number;
-    showSlider?: boolean;
-    showInput?: boolean;
-    inputTitle?: string;
-    enhancedMode?: boolean;
 }

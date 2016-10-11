@@ -13,4 +13,9 @@ gulp.task("build:ts", function () {
         .js.pipe(gulp.dest("dist"));
 });
 
-gulp.task("default", ["build:ts", "build:css"]);
+gulp.task("build:dts", function () {
+    return gulp.src("src/typings/pagination.d.ts")
+        .pipe(gulp.dest("dist"));
+});
+
+gulp.task("default", ["build:ts", "build:dts", "build:css"]);
