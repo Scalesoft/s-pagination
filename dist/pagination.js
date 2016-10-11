@@ -15,8 +15,9 @@ var Pagination = (function () {
             }
         }
     }
-    Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber) {
+    Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber, callPageClickCallbackOnInit) {
         if (defaultPageNumber === void 0) { defaultPageNumber = 1; }
+        if (callPageClickCallbackOnInit === void 0) { callPageClickCallbackOnInit = false; }
         defaultPageNumber = Number(defaultPageNumber);
         if (!defaultPageNumber) {
             defaultPageNumber = 1;
@@ -33,15 +34,16 @@ var Pagination = (function () {
             $innerContainer.append(this.createPageInput());
         }
         this.paginationContainer.append($innerContainer);
-        this.updateCurrentPage(defaultPageNumber);
+        this.updateCurrentPage(defaultPageNumber, callPageClickCallbackOnInit);
     };
-    Pagination.prototype.updateCurrentPage = function (newPageNumber) {
+    Pagination.prototype.updateCurrentPage = function (newPageNumber, callPageClickCallback) {
+        if (callPageClickCallback === void 0) { callPageClickCallback = true; }
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
         $(this.goToPageInput).val(newPageNumber);
         $(this.sliderDiv).slider("value", newPageNumber);
         $(this.sliderTipDiv).text(newPageNumber);
-        if (this.options.pageClickCallback) {
+        if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
     };

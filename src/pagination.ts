@@ -28,7 +28,7 @@ class Pagination {
         }
     }
 
-    public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1) {
+    public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1, callPageClickCallbackOnInit: boolean = false) {
         defaultPageNumber = Number(defaultPageNumber);
         if (!defaultPageNumber) {
             defaultPageNumber = 1;
@@ -51,10 +51,10 @@ class Pagination {
 
         this.paginationContainer.append($innerContainer);
 
-        this.updateCurrentPage(defaultPageNumber);
+        this.updateCurrentPage(defaultPageNumber, callPageClickCallbackOnInit);
     }
 
-    private updateCurrentPage(newPageNumber: number) {
+    private updateCurrentPage(newPageNumber: number, callPageClickCallback: boolean = true) {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
 
@@ -62,7 +62,7 @@ class Pagination {
         $(this.sliderDiv).slider("value", newPageNumber);
         $(this.sliderTipDiv).text(newPageNumber);
 
-        if (this.options.pageClickCallback) {
+        if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
     }

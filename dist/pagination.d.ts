@@ -10,8 +10,8 @@ declare class Pagination {
     private sliderDiv;
     private sliderTipDiv;
     constructor(options: Pagination.Options);
-    make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number): void;
-    private updateCurrentPage(newPageNumber);
+    make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number, callPageClickCallbackOnInit?: boolean): void;
+    private updateCurrentPage(newPageNumber, callPageClickCallback?);
     private createPageList();
     private createPageElement(label, pageNumber);
     private createDotsPageElement();
