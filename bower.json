@@ -11,7 +11,8 @@
   ],
   "ignore": [
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "src"
   ],
   "dependencies": {
     "jquery": ">= 2.0.0",
