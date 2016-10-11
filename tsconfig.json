@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "declaration": true,
+    "module": "commonjs",
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
@@ -8,6 +10,7 @@
   },
   "exclude": [
     "node_modules",
-    "bower_components"
+    "bower_components",
+    "dist"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "name": "pagination-scalesoft",
   "description": "A jQuery library for pagination with slider support using Bootstrap and jQueryUI components.",
   "license": "MIT",
@@ -21,6 +21,7 @@
     "gulp-typescript": "3.0.2",
     "gulp-sourcemaps": "1.6.0",
     "gulp-uglify": "1.5.4",
-    "rimraf": "2.5.4"
+    "rimraf": "2.5.4",
+    "event-stream": "3.3.4" 
   }
 }

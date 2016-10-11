@@ -1,5 +1,6 @@
 ﻿var gulp = require("gulp");
 var ts = require("gulp-typescript");
+var eventStream = require('event-stream');
 var tsProject = ts.createProject("tsconfig.json");
 
 gulp.task("build:css", function () {
@@ -8,14 +9,13 @@ gulp.task("build:css", function () {
 });
 
 gulp.task("build:ts", function () {
-    return tsProject.src()
-        .pipe(tsProject())
-        .js.pipe(gulp.dest("dist"));
+    var tsResult = tsProject.src()
+        .pipe(tsProject());
+
+    return eventStream.merge(
+        tsResult.dts.pipe(gulp.dest('dist')),
+        tsResult.js.pipe(gulp.dest("dist"))
+    );
 });
 
-gulp.task("build:dts", function () {
-    return gulp.src("src/typings/pagination.d.ts")
-        .pipe(gulp.dest("dist"));
-});
-
-gulp.task("default", ["build:ts", "build:dts", "build:css"]);
+gulp.task("default", ["build:ts", "build:css"]);
