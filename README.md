@@ -5,6 +5,9 @@ Page selected by user can be obtained by setting up callback or by redirection t
 The library using Bootstrap components for pagination and jQuery UI library for slider.
 This library also contains definition files (.d.ts) for TypeScript.
 
+## Demo
+[Pagination usage sample](https://scalesoft.github.io/pagination/)
+
 ## Usage
 The simplest usage is following:
 
