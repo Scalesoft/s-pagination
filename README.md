@@ -25,6 +25,7 @@ The library is configured by object passed in the constructor:
 * **container** - The place in the DOM, where to render this component. The parameter type is HTMLDivElement or JQuery. This parameter is **required**.
 * **pageClickCallback** - The callback function which is called when user change page by this component. The callback function contains one parameter with page number. Page numbers are equal to labels (first page has number 1).
 * **pageClickUrl** - The URL to which is browser redirected after user change page by this component. If type of specified parameter is string, substring "{{page}}" is replaced by appropriate page number. If type of specified parameter is function, page number is passed as parameter and return type is string.
+* **callPageClickCallbackOnInit** - If true, pageClickCallback is called immediately after component render (after make method call). Defaults to false.
 * **maxVisibleElements** - The number of visible buttons in pagination panel (including arrows on the edges and shorting dots). Default value is 13.
 * **showSlider** - If true, show slider for fast navigation between pages. Defaults to false.
 * **showInput** - If true, show text input box for direct navigation to specified page. Defaults to false.
