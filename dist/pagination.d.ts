@@ -10,8 +10,8 @@ declare class Pagination {
     private sliderDiv;
     private sliderTipDiv;
     constructor(options: Pagination.Options);
-    make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number, callPageClickCallbackOnInit?: boolean): void;
-    private updateCurrentPage(newPageNumber, callPageClickCallback?);
+    make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number): void;
+    private updateCurrentPage(newPageNumber, callPageClickCallback);
     private createPageList();
     private createPageElement(label, pageNumber);
     private createDotsPageElement();
@@ -20,7 +20,7 @@ declare class Pagination {
     private createPageInput();
     private createSlider();
     private onPageClick(event);
-    private onGoToPageClick();
+    private onGoToPageButtonClick();
     private onGoToInputKeyPress(event);
     private onSliderChange(event, ui);
     private createPageClickUrl(pageNumber);
@@ -31,6 +31,7 @@ declare class Pagination {
 declare namespace Pagination {
     interface Options {
         container: HTMLDivElement | JQuery;
+        callPageClickCallbackOnInit?: boolean;
         pageClickCallback?: (pageNumber: number) => void;
         pageClickUrl?: string | ((pageNumber: number) => string);
         maxVisibleElements?: number;

@@ -28,7 +28,7 @@ class Pagination {
         }
     }
 
-    public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1, callPageClickCallbackOnInit: boolean = false) {
+    public make(itemsCount: number, itemsOnPage: number, defaultPageNumber: number = 1) {
         defaultPageNumber = Number(defaultPageNumber);
         if (!defaultPageNumber) {
             defaultPageNumber = 1;
@@ -51,10 +51,10 @@ class Pagination {
 
         this.paginationContainer.append($innerContainer);
 
-        this.updateCurrentPage(defaultPageNumber, callPageClickCallbackOnInit);
+        this.updateCurrentPage(defaultPageNumber, this.options.callPageClickCallbackOnInit);
     }
 
-    private updateCurrentPage(newPageNumber: number, callPageClickCallback: boolean = true) {
+    private updateCurrentPage(newPageNumber: number, callPageClickCallback: boolean) {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
 
@@ -80,20 +80,16 @@ class Pagination {
     private createPageElement(label: string, pageNumber: any): HTMLLIElement {
         var pageLi = document.createElement("li");
         var pageLink = document.createElement("a");
-        $(pageLink)
+        var $pageLink = $(pageLink);
+        $pageLink
             .html(label)
-            .attr("data-page-number", pageNumber);
+            .attr("data-page-number", pageNumber)
+            .click(this.onPageClick.bind(this));
 
         var pageClickUrl = this.options.pageClickUrl;
-        if (pageClickUrl) {
-            var url = this.createPageClickUrl(pageNumber);
-            $(pageLink).attr("href", url);
-        } else {
-            $(pageLink)
-                .attr("href", "#")
-                .click(this.onPageClick.bind(this));
-        }
-
+        var hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
+        $pageLink.attr("href", hrefUrl);
+        
         pageLi.appendChild(pageLink);
         return pageLi;
     }
@@ -221,7 +217,7 @@ class Pagination {
             .addClass("btn")
             .addClass("btn-default")
             .append(goToPageIcon)
-            .click(this.onGoToPageClick.bind(this));
+            .click(this.onGoToPageButtonClick.bind(this));
 
         $(goToPageIcon)
             .addClass("glyphicon")
@@ -289,14 +285,21 @@ class Pagination {
     }
 
     private onPageClick(event: JQueryEventObject) {
-        event.preventDefault();
         var pageValue = $(event.target).data("page-number");
         var pageNumber = Number(pageValue);
 
-        this.goToPage(pageNumber);
+        if (this.options.pageClickUrl) {
+            if (this.options.pageClickCallback) {
+                this.options.pageClickCallback(pageNumber);
+            }
+            return;
+        }
+
+        event.preventDefault();
+        this.updateCurrentPage(pageNumber, true);
     }
 
-    private onGoToPageClick() {
+    private onGoToPageButtonClick() {
         var pageNumberData = $(this.goToPageInput).val();
         var pageNumber = Number(pageNumberData);
         this.goToPage(pageNumber);
@@ -304,7 +307,7 @@ class Pagination {
 
     private onGoToInputKeyPress(event: JQueryEventObject) {
         if (event.keyCode === 13) {
-            this.onGoToPageClick();
+            this.onGoToPageButtonClick();
         }
     }
 
@@ -333,11 +336,11 @@ class Pagination {
             pageNumber = this.pageCount;
         }
 
+        this.updateCurrentPage(pageNumber, true);
+
         if (this.options.pageClickUrl) {
             var url = this.createPageClickUrl(pageNumber);
             window.location.href = url;
-        } else {
-            this.updateCurrentPage(pageNumber);
         }
     }
 
@@ -353,6 +356,7 @@ class Pagination {
 declare namespace Pagination {
     interface Options {
         container: HTMLDivElement | JQuery;
+        callPageClickCallbackOnInit?: boolean;
         pageClickCallback?: (pageNumber: number) => void;
         pageClickUrl?: string | ((pageNumber: number) => string);
         maxVisibleElements?: number;

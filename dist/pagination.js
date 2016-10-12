@@ -15,9 +15,8 @@ var Pagination = (function () {
             }
         }
     }
-    Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber, callPageClickCallbackOnInit) {
+    Pagination.prototype.make = function (itemsCount, itemsOnPage, defaultPageNumber) {
         if (defaultPageNumber === void 0) { defaultPageNumber = 1; }
-        if (callPageClickCallbackOnInit === void 0) { callPageClickCallbackOnInit = false; }
         defaultPageNumber = Number(defaultPageNumber);
         if (!defaultPageNumber) {
             defaultPageNumber = 1;
@@ -34,10 +33,9 @@ var Pagination = (function () {
             $innerContainer.append(this.createPageInput());
         }
         this.paginationContainer.append($innerContainer);
-        this.updateCurrentPage(defaultPageNumber, callPageClickCallbackOnInit);
+        this.updateCurrentPage(defaultPageNumber, this.options.callPageClickCallbackOnInit);
     };
     Pagination.prototype.updateCurrentPage = function (newPageNumber, callPageClickCallback) {
-        if (callPageClickCallback === void 0) { callPageClickCallback = true; }
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
         $(this.goToPageInput).val(newPageNumber);
@@ -58,19 +56,14 @@ var Pagination = (function () {
     Pagination.prototype.createPageElement = function (label, pageNumber) {
         var pageLi = document.createElement("li");
         var pageLink = document.createElement("a");
-        $(pageLink)
+        var $pageLink = $(pageLink);
+        $pageLink
             .html(label)
-            .attr("data-page-number", pageNumber);
+            .attr("data-page-number", pageNumber)
+            .click(this.onPageClick.bind(this));
         var pageClickUrl = this.options.pageClickUrl;
-        if (pageClickUrl) {
-            var url = this.createPageClickUrl(pageNumber);
-            $(pageLink).attr("href", url);
-        }
-        else {
-            $(pageLink)
-                .attr("href", "#")
-                .click(this.onPageClick.bind(this));
-        }
+        var hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
+        $pageLink.attr("href", hrefUrl);
         pageLi.appendChild(pageLink);
         return pageLi;
     };
@@ -180,7 +173,7 @@ var Pagination = (function () {
             .addClass("btn")
             .addClass("btn-default")
             .append(goToPageIcon)
-            .click(this.onGoToPageClick.bind(this));
+            .click(this.onGoToPageButtonClick.bind(this));
         $(goToPageIcon)
             .addClass("glyphicon")
             .addClass("glyphicon-arrow-right");
@@ -235,19 +228,25 @@ var Pagination = (function () {
         return sliderContainer;
     };
     Pagination.prototype.onPageClick = function (event) {
-        event.preventDefault();
         var pageValue = $(event.target).data("page-number");
         var pageNumber = Number(pageValue);
-        this.goToPage(pageNumber);
+        if (this.options.pageClickUrl) {
+            if (this.options.pageClickCallback) {
+                this.options.pageClickCallback(pageNumber);
+            }
+            return;
+        }
+        event.preventDefault();
+        this.updateCurrentPage(pageNumber, true);
     };
-    Pagination.prototype.onGoToPageClick = function () {
+    Pagination.prototype.onGoToPageButtonClick = function () {
         var pageNumberData = $(this.goToPageInput).val();
         var pageNumber = Number(pageNumberData);
         this.goToPage(pageNumber);
     };
     Pagination.prototype.onGoToInputKeyPress = function (event) {
         if (event.keyCode === 13) {
-            this.onGoToPageClick();
+            this.onGoToPageButtonClick();
         }
     };
     Pagination.prototype.onSliderChange = function (event, ui) {
@@ -273,12 +272,10 @@ var Pagination = (function () {
         else if (pageNumber > this.pageCount) {
             pageNumber = this.pageCount;
         }
+        this.updateCurrentPage(pageNumber, true);
         if (this.options.pageClickUrl) {
             var url = this.createPageClickUrl(pageNumber);
             window.location.href = url;
-        }
-        else {
-            this.updateCurrentPage(pageNumber);
         }
     };
     Pagination.prototype.getPageCount = function () {

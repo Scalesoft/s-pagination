@@ -26,8 +26,10 @@
 <div id="content">
     <h3>Basic pagination (default)</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-1"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-1"></span>
+        </samp>
 
         <div id="pagination-1"></div>
     </div>
@@ -35,8 +37,10 @@
     
     <h3>Pagination with text input and limited elements count</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-2"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-2"></span>
+        </samp>
 
         <div id="pagination-2"></div>
     </div>
@@ -44,8 +48,10 @@
     
     <h3>Pagination with slider and limited elements count</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-3"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-3"></span>
+        </samp>
 
         <div id="pagination-3"></div>
     </div>
@@ -53,8 +59,10 @@
     
     <h3>Pagination with enabled enhanced mode</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-4"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-4"></span>
+        </samp>
 
         <div id="pagination-4"></div>
     </div>
@@ -62,8 +70,10 @@
     
     <h3>Pagination with all options enabled</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-all"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-all"></span>
+        </samp>
 
         <div id="pagination-all"></div>
     </div>
@@ -71,8 +81,10 @@
     
     <h3>Pagination using redirect to specified page</h3>
     <div>
-        <span>Current page:</span>
-        <span id="page-number-5"></span>
+        <samp>
+            <span>Current page:</span>
+            <span id="page-number-5"></span>
+        </samp>
 
         <div id="pagination-5"></div>
     </div>
@@ -141,6 +153,7 @@
         var paginationAll = new Pagination({
             container: $("#pagination-all"),
             pageClickCallback: pageClickAll,
+            callPageClickCallbackOnInit: true,
             showInput: true,
             showSlider: true,
             enhancedMode: true,
@@ -164,6 +177,7 @@
             pageClickUrl: "?page={{page}}",
             //pageClickUrl: function(num) { return "?page=" + num; },
             pageClickCallback: pageClick5,
+            callPageClickCallbackOnInit: true,
             showInput: true,
             showSlider: true,
             enhancedMode: true,
