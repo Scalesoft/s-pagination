@@ -1,5 +1,5 @@
 {
-  "name": "pagination-scalesoft",
+  "name": "s-pagination",
   "description": "A JavaScript library for pagination with slider support using Bootstrap and jQuery UI components.",
   "license": "MIT",
   "authors": [ "Scalesoft s.r.o." ],

@@ -1,12 +1,12 @@
-﻿# Pagination
+﻿# S-Pagination
 A JavaScript library for creating pagination.
-The main goal of this library is simple usage, so for initialization is required only specify page size, number of items and place for Pagination rendering (other parameters are optional).
+The main goal of this library is simple usage, so for initialization is required only specify page size, number of items and place for S-Pagination rendering (other parameters are optional).
 Page selected by user can be obtained by setting up callback or by redirection to specified URL.
 The library using Bootstrap components for pagination and jQuery UI library for slider.
 This library also contains definition files (.d.ts) for TypeScript.
 
 ## Demo
-[Pagination usage sample](https://scalesoft.github.io/pagination/)
+[S-Pagination usage sample](https://scalesoft.github.io/s-pagination/)
 
 ## Usage
 The simplest usage is following:
