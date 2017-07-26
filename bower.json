@@ -12,7 +12,10 @@
   "ignore": [
     "node_modules",
     "bower_components",
-    "src"
+    "src",
+    ".gitignore",
+    "gulpfile.js",
+    "tsconfig.json"
   ],
   "dependencies": {
     "jquery": ">= 2.0.0",
