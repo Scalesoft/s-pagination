@@ -14,6 +14,12 @@
     "type": "git",
     "url": "https://github.com/Scalesoft/s-pagination.git"
   },
+  "files": [
+	"dist/",
+	"LICENSE",
+	"README.md",
+	"package.json"
+  ],
   "devDependencies": {
     "bower": "1.7.9",
     "typescript": "2.0.3",
