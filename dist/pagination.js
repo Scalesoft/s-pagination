@@ -1,3 +1,5 @@
+
+
 var Pagination = /** @class */ (function () {
     function Pagination(options) {
         this.usePaginationDots = false;
@@ -288,3 +290,5 @@ var Pagination = /** @class */ (function () {
     };
     return Pagination;
 }());
+
+//# sourceMappingURL=pagination.js.map

@@ -73,6 +73,3 @@ packages/
 node_modules/
 
 yarn.lock
-
-#Empty file, product of the interface file
-dist/pagination.options.js 

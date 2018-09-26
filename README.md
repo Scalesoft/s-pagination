@@ -13,7 +13,7 @@ The simplest usage is following:
 
 ```JavaScript
 var pagination = new Pagination({
-	container: $("#pagination-1"),
+	container: document.getElementById("pagination-1") as HTMLDivElement,
 	pageClickCallback: function(pageNumber) {}
 });
 pagination.make(itemsCount, itemsOnPage);
