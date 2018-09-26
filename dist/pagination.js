@@ -1,4 +1,6 @@
-var Pagination = (function () {
+
+
+var Pagination = /** @class */ (function () {
     function Pagination(options) {
         this.usePaginationDots = false;
         this.options = options;
@@ -35,6 +37,25 @@ var Pagination = (function () {
         this.paginationContainer.append($innerContainer);
         this.updateCurrentPage(defaultPageNumber, this.options.callPageClickCallbackOnInit);
     };
+    Pagination.prototype.goToPage = function (pageNumber) {
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        }
+        else if (pageNumber > this.pageCount) {
+            pageNumber = this.pageCount;
+        }
+        this.updateCurrentPage(pageNumber, true);
+        if (this.options.pageClickUrl) {
+            var url = this.createPageClickUrl(pageNumber);
+            window.location.href = url;
+        }
+    };
+    Pagination.prototype.getPageCount = function () {
+        return this.pageCount;
+    };
+    Pagination.prototype.getCurrentPage = function () {
+        return this.currentPage;
+    };
     Pagination.prototype.updateCurrentPage = function (newPageNumber, callPageClickCallback) {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
@@ -55,7 +76,9 @@ var Pagination = (function () {
     };
     Pagination.prototype.createPageElement = function (label, pageNumber) {
         var pageLi = document.createElement("li");
+        pageLi.classList.add("page-item");
         var pageLink = document.createElement("a");
+        pageLink.classList.add("page-link");
         var $pageLink = $(pageLink);
         $pageLink
             .html(label)
@@ -207,7 +230,7 @@ var Pagination = (function () {
             slide: function (event, ui) {
                 showSliderTip();
                 $(tooltipInner).text(ui.value);
-            }
+            },
         });
         $(tooltip)
             .addClass("tooltip")
@@ -265,24 +288,7 @@ var Pagination = (function () {
                 return "#";
         }
     };
-    Pagination.prototype.goToPage = function (pageNumber) {
-        if (pageNumber < 1) {
-            pageNumber = 1;
-        }
-        else if (pageNumber > this.pageCount) {
-            pageNumber = this.pageCount;
-        }
-        this.updateCurrentPage(pageNumber, true);
-        if (this.options.pageClickUrl) {
-            var url = this.createPageClickUrl(pageNumber);
-            window.location.href = url;
-        }
-    };
-    Pagination.prototype.getPageCount = function () {
-        return this.pageCount;
-    };
-    Pagination.prototype.getCurrentPage = function () {
-        return this.currentPage;
-    };
     return Pagination;
 }());
+
+//# sourceMappingURL=pagination.js.map

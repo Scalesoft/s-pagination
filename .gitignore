@@ -69,9 +69,7 @@ packages/
 [Ll]ogs/
 *.svclog
 
-
-#Bower libraries
-bower_components/
-
 #NPM
 node_modules/
+
+yarn.lock

@@ -21,7 +21,7 @@ class Pagination {
                 this.maxVisibleElements--;
             }
 
-            var enhancementCorrection = this.options.enhancedMode ? 4 : 0;
+            const enhancementCorrection = this.options.enhancedMode ? 4 : 0;
             if (this.maxVisibleElements - enhancementCorrection < 7) {
                 this.maxVisibleElements = 7 + enhancementCorrection;
             }
@@ -38,7 +38,7 @@ class Pagination {
 
         this.paginationContainer.empty();
 
-        var $innerContainer = $(document.createElement("div"));
+        const $innerContainer = $(document.createElement("div"));
         $innerContainer.addClass("pagination-container");
 
         if (this.options.showSlider) {
@@ -52,6 +52,29 @@ class Pagination {
         this.paginationContainer.append($innerContainer);
 
         this.updateCurrentPage(defaultPageNumber, this.options.callPageClickCallbackOnInit);
+    }
+
+    public goToPage(pageNumber: number) {
+        if (pageNumber < 1) {
+            pageNumber = 1;
+        } else if (pageNumber > this.pageCount) {
+            pageNumber = this.pageCount;
+        }
+
+        this.updateCurrentPage(pageNumber, true);
+
+        if (this.options.pageClickUrl) {
+            const url = this.createPageClickUrl(pageNumber);
+            window.location.href = url;
+        }
+    }
+
+    public getPageCount(): number {
+        return this.pageCount;
+    }
+
+    public getCurrentPage(): number {
+        return this.currentPage;
     }
 
     private updateCurrentPage(newPageNumber: number, callPageClickCallback: boolean) {
@@ -68,7 +91,7 @@ class Pagination {
     }
 
     private createPageList(): HTMLUListElement {
-        var paginationUl = document.createElement("ul");
+        const paginationUl = document.createElement("ul");
         $(paginationUl)
             .addClass("pagination")
             .addClass("pagination-sm");
@@ -78,29 +101,31 @@ class Pagination {
     }
 
     private createPageElement(label: string, pageNumber: any): HTMLLIElement {
-        var pageLi = document.createElement("li");
-        var pageLink = document.createElement("a");
-        var $pageLink = $(pageLink);
+        const pageLi = document.createElement("li");
+        pageLi.classList.add("page-item");
+        const pageLink = document.createElement("a");
+        pageLink.classList.add("page-link");
+        const $pageLink = $(pageLink);
         $pageLink
             .html(label)
             .attr("data-page-number", pageNumber)
             .click(this.onPageClick.bind(this));
 
-        var pageClickUrl = this.options.pageClickUrl;
-        var hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
+        const pageClickUrl = this.options.pageClickUrl;
+        const hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
         $pageLink.attr("href", hrefUrl);
-        
+
         pageLi.appendChild(pageLink);
         return pageLi;
     }
 
     private createDotsPageElement(): HTMLLIElement {
-        var element = document.createElement("li");
+        const element = document.createElement("li");
         $(element)
             .addClass("disabled")
             .addClass("three-dots");
 
-        var contentElement = document.createElement("span");
+        const contentElement = document.createElement("span");
         contentElement.innerHTML = "&hellip;";
 
         element.appendChild(contentElement);
@@ -108,15 +133,14 @@ class Pagination {
     }
 
     private recreatePageElements(pageNumber: number) {
-        var $paginationUl = $(this.paginationUl);
-        var pageCount = this.pageCount;
-        var isEnhanced = this.options.enhancedMode;
-
-        var previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
-        var nextPage = pageNumber < pageCount ? pageNumber + 1 : pageCount;
-        var previousPageLi = this.createPageElement("&laquo;", previousPage);
-        var nextPageLi = this.createPageElement("&raquo;", nextPage);
-        var createAndAppendPageElement = (createPageNumber: number) => {
+        const $paginationUl = $(this.paginationUl);
+        const pageCount = this.pageCount;
+        const isEnhanced = this.options.enhancedMode;
+        const previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
+        const nextPage = pageNumber < pageCount ? pageNumber + 1 : pageCount;
+        const previousPageLi = this.createPageElement("&laquo;", previousPage);
+        const nextPageLi = this.createPageElement("&raquo;", nextPage);
+        const createAndAppendPageElement = (createPageNumber: number) => {
             const pageLi = this.createPageElement(createPageNumber.toString(), createPageNumber);
             if (createPageNumber === pageNumber) {
                 pageLi.classList.add("active");
@@ -135,12 +159,12 @@ class Pagination {
             return;
         }
 
-        var centerCount = this.maxVisibleElements - 6;
-        var sideCount = (centerCount - 1) / 2;
-        var centerLeftPage = pageNumber - sideCount;
-        var centerRightPage = pageNumber + sideCount;
-        var showDotsLeft = centerLeftPage - 1 > 1;
-        var showDotsRight = centerRightPage + 1 < pageCount;
+        const centerCount = this.maxVisibleElements - 6;
+        const sideCount = (centerCount - 1) / 2;
+        let centerLeftPage = pageNumber - sideCount;
+        let centerRightPage = pageNumber + sideCount;
+        const showDotsLeft = centerLeftPage - 1 > 1;
+        const showDotsRight = centerRightPage + 1 < pageCount;
 
         if (centerLeftPage < 3) {
             centerLeftPage = 2;
@@ -151,14 +175,13 @@ class Pagination {
             centerLeftPage = centerRightPage - centerCount;
         }
 
-
         $paginationUl.append(previousPageLi);
         createAndAppendPageElement(1);
 
         if (showDotsLeft) {
             $paginationUl.append(this.createDotsPageElement());
         }
-        var isRightEnhancement = false;
+        let isRightEnhancement = false;
         if (isEnhanced) {
             if (centerLeftPage >= 5) {
                 createAndAppendPageElement(Math.ceil((centerLeftPage + 3) / 2));
@@ -190,11 +213,11 @@ class Pagination {
     }
 
     private createPageInput(): HTMLDivElement {
-        var inputGroupDiv = document.createElement("div");
-        var inputGroupButtonSpan = document.createElement("span");
-        var goToPageInput = document.createElement("input");
-        var goToPageButton = document.createElement("button");
-        var goToPageIcon = document.createElement("span");
+        const inputGroupDiv = document.createElement("div");
+        const inputGroupButtonSpan = document.createElement("span");
+        const goToPageInput = document.createElement("input");
+        const goToPageButton = document.createElement("button");
+        const goToPageIcon = document.createElement("span");
 
         $(inputGroupDiv)
             .addClass("input-group")
@@ -232,19 +255,19 @@ class Pagination {
     }
 
     private createSlider(): HTMLDivElement {
-        var sliderContainer = document.createElement("div");
-        var slider = document.createElement("div");
+        const sliderContainer = document.createElement("div");
+        const slider = document.createElement("div");
 
-        var tooltip = document.createElement("div");
-        var tooltipArrow = document.createElement("div");
-        var tooltipInner = document.createElement("div");
+        const tooltip = document.createElement("div");
+        const tooltipArrow = document.createElement("div");
+        const tooltipInner = document.createElement("div");
 
-        var showSliderTip = () => {
+        const showSliderTip = () => {
             $(tooltip).stop(true, true).show();
         };
-        var hideSliderTip = () => {
+        const hideSliderTip = () => {
             $(tooltip).fadeOut(600);
-        }
+        };
 
         $(sliderContainer)
             .addClass("pagination-slider")
@@ -259,7 +282,7 @@ class Pagination {
             slide: (event, ui) => {
                 showSliderTip();
                 $(tooltipInner).text(ui.value);
-            }
+            },
         });
 
         $(tooltip)
@@ -285,8 +308,8 @@ class Pagination {
     }
 
     private onPageClick(event: JQueryEventObject) {
-        var pageValue = $(event.target).data("page-number");
-        var pageNumber = Number(pageValue);
+        const pageValue = $(event.target).data("page-number");
+        const pageNumber = Number(pageValue);
 
         if (this.options.pageClickUrl) {
             if (this.options.pageClickCallback) {
@@ -300,8 +323,8 @@ class Pagination {
     }
 
     private onGoToPageButtonClick() {
-        var pageNumberData = $(this.goToPageInput).val();
-        var pageNumber = Number(pageNumberData);
+        const pageNumberData = $(this.goToPageInput).val();
+        const pageNumber = Number(pageNumberData);
         this.goToPage(pageNumber);
     }
 
@@ -318,7 +341,7 @@ class Pagination {
     }
 
     private createPageClickUrl(pageNumber: number): string {
-        var pageClickUrl = this.options.pageClickUrl;
+        const pageClickUrl = this.options.pageClickUrl;
         switch (typeof pageClickUrl) {
             case "function":
                 return (pageClickUrl as (x) => string)(pageNumber);
@@ -327,42 +350,5 @@ class Pagination {
             default:
                 return "#";
         }
-    }
-
-    public goToPage(pageNumber: number) {
-        if (pageNumber < 1) {
-            pageNumber = 1;
-        } else if (pageNumber > this.pageCount) {
-            pageNumber = this.pageCount;
-        }
-
-        this.updateCurrentPage(pageNumber, true);
-
-        if (this.options.pageClickUrl) {
-            var url = this.createPageClickUrl(pageNumber);
-            window.location.href = url;
-        }
-    }
-
-    public getPageCount(): number {
-        return this.pageCount;
-    }
-
-    public getCurrentPage(): number {
-        return this.currentPage;
-    }
-}
-
-declare namespace Pagination {
-    interface Options {
-        container: HTMLDivElement | JQuery;
-        callPageClickCallbackOnInit?: boolean;
-        pageClickCallback?: (pageNumber: number) => void;
-        pageClickUrl?: string | ((pageNumber: number) => string);
-        maxVisibleElements?: number;
-        showSlider?: boolean;
-        showInput?: boolean;
-        inputTitle?: string;
-        enhancedMode?: boolean;
     }
 }
