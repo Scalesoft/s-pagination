@@ -69,9 +69,10 @@ packages/
 [Ll]ogs/
 *.svclog
 
-
-#Bower libraries
-bower_components/
-
 #NPM
 node_modules/
+
+yarn.lock
+
+#Empty file, product of the interface file
+dist/pagination.options.js 
