@@ -41,3 +41,6 @@ The library is configured by object passed in the constructor:
 * goToPage(pageNumber) - Force "Go to page" action. Component is rerendered to specified page and actions (pageClickCallback, pageClickUrl) are invoked.
 * getPageCount() - Returns current page count.
 * getCurrentPage() - Returns current page number.
+
+## Changes
+Added support for Bootstrap v4.x
