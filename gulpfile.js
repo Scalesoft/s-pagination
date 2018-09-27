@@ -33,8 +33,7 @@ gulp.task('lint:ts', () =>
 gulp.task('build:ts', ['lint:ts'], () => {
     const tsResult = tsProject.src()
         .pipe(sourcemaps.init())
-        .pipe(tsProject().on('error', function () { process.exit(1) }))
-        ;
+        .pipe(tsProject().on('error', function () { process.exit(1) }));
 
     return eventStream.merge(
         tsResult.dts
