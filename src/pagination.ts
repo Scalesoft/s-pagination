@@ -81,8 +81,17 @@ class Pagination {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
 
-        $(this.goToPageInput).val(newPageNumber);
-        $(this.sliderDiv).slider("value", newPageNumber);
+        if (this.options.showInput && this.goToPageInput) {
+            $(this.goToPageInput).val(newPageNumber);
+        }
+
+        if (this.options.showSlider && this.sliderDiv) {
+            const sliderElJq = $(this.sliderDiv);
+            if (sliderElJq.slider) {
+                sliderElJq.slider("value", newPageNumber);
+            }
+        }
+
         $(this.sliderTipDiv).text(newPageNumber);
 
         if (callPageClickCallback && this.options.pageClickCallback) {
