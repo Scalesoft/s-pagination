@@ -1,18 +1,7 @@
-declare namespace Pagination {
-    interface Options {
-        container: HTMLDivElement | JQuery;
-        callPageClickCallbackOnInit?: boolean;
-        pageClickCallback?: (pageNumber: number) => void;
-        pageClickUrl?: string | ((pageNumber: number) => string);
-        maxVisibleElements?: number;
-        showSlider?: boolean;
-        showInput?: boolean;
-        inputTitle?: string;
-        enhancedMode?: boolean;
-    }
-}
+// TODO: this file was created manually by merging pagination.d.ts and pagination.options.d.ts files
+// Create it automatically.
 
-declare class Pagination {
+export default class Pagination {
     private options;
     private paginationContainer;
     private maxVisibleElements;
@@ -41,4 +30,20 @@ declare class Pagination {
     private onGoToInputKeyPress;
     private onSliderChange;
     private createPageClickUrl;
+}
+
+/// <reference types="jquery" />
+/// <reference types="jqueryui" />
+declare namespace Pagination {
+    interface Options {
+        container: HTMLDivElement | JQuery;
+        callPageClickCallbackOnInit?: boolean;
+        pageClickCallback?: (pageNumber: number) => void;
+        pageClickUrl?: string | ((pageNumber: number) => string);
+        maxVisibleElements?: number;
+        showSlider?: boolean;
+        showInput?: boolean;
+        inputTitle?: string;
+        enhancedMode?: boolean;
+    }
 }

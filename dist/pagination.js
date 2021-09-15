@@ -1,5 +1,21 @@
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define("Pagination", [], factory);
+	else if(typeof exports === 'object')
+		exports["Pagination"] = factory();
+	else
+		root["Pagination"] = factory();
+})(self, function() {
+return /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it uses a non-standard name for the exports (exports).
+(() => {
+var exports = __webpack_exports__;
 
-
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 var Pagination = /** @class */ (function () {
     function Pagination(options) {
         this.usePaginationDots = false;
@@ -297,5 +313,12 @@ var Pagination = /** @class */ (function () {
     };
     return Pagination;
 }());
+exports["default"] = Pagination;
 
+})();
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+;
+});
 //# sourceMappingURL=pagination.js.map

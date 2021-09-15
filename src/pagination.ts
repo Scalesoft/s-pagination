@@ -1,4 +1,4 @@
-class Pagination {
+export default class Pagination {
     private options: Pagination.Options;
     private paginationContainer: JQuery;
     private maxVisibleElements: number;
