@@ -73,3 +73,6 @@ packages/
 node_modules/
 
 yarn.lock
+
+#Build Files
+src/*.d.ts

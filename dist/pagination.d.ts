@@ -1,7 +1,4 @@
-// TODO: this file was created manually by merging pagination.d.ts and pagination.options.d.ts files
-// Create it automatically.
-
-export default class Pagination {
+export declare class Pagination {
     private options;
     private paginationContainer;
     private maxVisibleElements;
@@ -31,6 +28,7 @@ export default class Pagination {
     private onSliderChange;
     private createPageClickUrl;
 }
+export default Pagination;
 
 /// <reference types="jquery" />
 /// <reference types="jqueryui" />

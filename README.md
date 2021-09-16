@@ -22,6 +22,14 @@ pagination.make(itemsCount, itemsOnPage);
 The constructor initialize component with options but not render anything.
 The component is rendered after make() method call. This method can be called repeatedly for the component is rerendering.
 
+### Importing in TypeScript
+
+Currently the following statement has to be used:
+
+```TypeScript
+const Pagination = require("s-pagination");
+```
+
 ## Configuration
 The library is configured by object passed in the constructor:
 
