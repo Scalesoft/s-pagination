@@ -1,6 +1,6 @@
 declare namespace Pagination {
     interface Options {
-        container: HTMLDivElement;
+        container: HTMLDivElement | JQuery;
         callPageClickCallbackOnInit?: boolean;
         pageClickCallback?: (pageNumber: number) => void;
         pageClickUrl?: string | ((pageNumber: number) => string);
