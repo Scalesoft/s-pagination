@@ -1,11 +1,12 @@
 {
-  "version": "2.2.0-beta.1",
+  "version": "2.2.0-beta.2",
   "name": "s-pagination",
   "description": "A JavaScript library for pagination with slider support using Bootstrap and jQuery UI components.",
   "license": "MIT",
   "author": "Scalesoft s.r.o.",
-  "main": "dist/pagination.js",
-  "types": "dist/pagination.d.ts",
+  "main": "dist/pagination.esm.js",
+  "module": "dist/pagination.esm.js",
+  "types": "dist/types/pagination.d.ts",
   "keywords": [
     "pagination",
     "pager",
@@ -22,8 +23,8 @@
     "package.json"
   ],
   "scripts": {
-    "prebuild":"npx yarn install",
-    "build": "webpack"
+    "prebuild": "npx yarn install",
+    "build": "rollup -c rollup.config.js"
   },
   "dependencies": {
     "bootstrap": "^4.0",
@@ -31,16 +32,14 @@
     "jquery-ui-dist": "^1.12.1"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
     "@types/jquery": "^3.3.10",
     "@types/jqueryui": "^1.12.4",
-    "copy-webpack-plugin": "^9.0.1",
     "popper.js": "^1.14.5",
-    "rimraf": "^3.0.2",
-    "ts-loader": "^9.2.5",
+    "rollup": "^2.67.0",
+    "rollup-plugin-copy": "^3.4.0",
+    "tslib": "^2.3.1",
     "tslint": "^6.1.3",
-    "typescript": "^4.5.5",
-    "webpack": "^5.52.1",
-    "webpack-cli": "^4.8.0",
-    "webpack-concat-files-plugin": "^0.5.2"
+    "typescript": "^4.5.5"
   }
 }

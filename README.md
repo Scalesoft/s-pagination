@@ -12,9 +12,10 @@ This library also contains definition files (.d.ts) for TypeScript.
 The simplest usage is following:
 
 ```JavaScript
-var pagination = new Pagination({
-	container: document.getElementById("pagination-1") as HTMLDivElement,
-	pageClickCallback: function(pageNumber) {}
+var pagination = new PaginationNs({
+    container: document.getElementById("pagination-1") as HTMLDivElement,
+    pageClickCallback: function (pageNumber) {
+    }
 });
 pagination.make(itemsCount, itemsOnPage);
 ```
@@ -24,10 +25,10 @@ The component is rendered after make() method call. This method can be called re
 
 ### Importing in TypeScript
 
-Currently the following statement has to be used:
+The library can be imported simply using the following statement:
 
 ```TypeScript
-const Pagination = require("s-pagination");
+import Pagination from "s-pagination";
 ```
 
 ## Configuration
