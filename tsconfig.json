@@ -7,7 +7,7 @@
     "noImplicitAny": false,
     "noEmitOnError": true,
     "removeComments": false,
-    "target": "es2016",
+    "target": "es5",
   },
   "exclude": [
     "node_modules",
