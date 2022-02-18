@@ -12,15 +12,24 @@ This library also contains definition files (.d.ts) for TypeScript.
 The simplest usage is following:
 
 ```JavaScript
-var pagination = new Pagination({
-	container: document.getElementById("pagination-1") as HTMLDivElement,
-	pageClickCallback: function(pageNumber) {}
+var pagination = new PaginationNs({
+    container: document.getElementById("pagination-1") as HTMLDivElement,
+    pageClickCallback: function (pageNumber) {
+    }
 });
 pagination.make(itemsCount, itemsOnPage);
 ```
 
 The constructor initialize component with options but not render anything.
 The component is rendered after make() method call. This method can be called repeatedly for the component is rerendering.
+
+### Importing in TypeScript
+
+The library can be imported simply using the following statement:
+
+```TypeScript
+import Pagination from "s-pagination";
+```
 
 ## Configuration
 The library is configured by object passed in the constructor:

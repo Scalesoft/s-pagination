@@ -1,17 +1,4 @@
-declare namespace Pagination {
-    interface Options {
-        container: HTMLDivElement | JQuery;
-        callPageClickCallbackOnInit?: boolean;
-        pageClickCallback?: (pageNumber: number) => void;
-        pageClickUrl?: string | ((pageNumber: number) => string);
-        maxVisibleElements?: number;
-        showSlider?: boolean;
-        showInput?: boolean;
-        inputTitle?: string;
-        enhancedMode?: boolean;
-    }
-}
-
+import Options from "./pagination.options";
 declare class Pagination {
     private options;
     private paginationContainer;
@@ -23,7 +10,7 @@ declare class Pagination {
     private goToPageInput;
     private sliderDiv;
     private sliderTipDiv;
-    constructor(options: Pagination.Options);
+    constructor(options: Options);
     make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number): void;
     goToPage(pageNumber: number): void;
     getPageCount(): number;
@@ -42,3 +29,4 @@ declare class Pagination {
     private onSliderChange;
     private createPageClickUrl;
 }
+export default Pagination;
