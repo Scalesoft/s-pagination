@@ -1,3 +1,6 @@
+import 'jquery';
+import 'jqueryui/slider';
+
 var Pagination = /** @class */ (function () {
     function Pagination(options) {
         this.usePaginationDots = false;

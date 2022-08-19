@@ -33,6 +33,8 @@ ipch/
 [Aa]rtifacts/
 Ankh.NoLoad
 
+.idea/
+
 #MonoDevelop
 *.pidb
 *.userprefs

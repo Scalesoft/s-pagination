@@ -28,13 +28,13 @@
   },
   "dependencies": {
     "bootstrap": "^4.0",
-    "jquery": "^3.3.1",
-    "jquery-ui-dist": "^1.12.1"
+    "jquery": "^3.6.0",
+    "jquery-ui": "^1.13.2"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@types/jquery": "^3.3.10",
-    "@types/jqueryui": "^1.12.4",
+    "@types/jquery": "^3.5.14",
+    "@types/jqueryui": "^1.12.16",
     "popper.js": "^1.14.5",
     "rollup": "^2.67.0",
     "rollup-plugin-copy": "^3.4.0",

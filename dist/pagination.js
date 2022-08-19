@@ -1,6 +1,6 @@
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-    typeof define === 'function' && define.amd ? define(factory) :
+    typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('jquery'), require('jqueryui/slider')) :
+    typeof define === 'function' && define.amd ? define(['jquery', 'jqueryui/slider'], factory) :
     (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.Pagination = factory());
 })(this, (function () { 'use strict';
 

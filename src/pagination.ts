@@ -1,3 +1,5 @@
+import "jquery";
+import "jqueryui/slider";
 import Options from "./pagination.options";
 
 class Pagination {
