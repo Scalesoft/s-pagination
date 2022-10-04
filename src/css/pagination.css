@@ -11,13 +11,15 @@
     width: 95px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 0.5rem;
 }
 
 .pagination-slider {
     margin-top: 7px;
 }
 
-.pagination-slider-handle {
+.pagination-slider .pagination-slider-handle {
+    z-index: 4;
     outline-style: none;
     outline-width: 0;
 }
@@ -27,4 +29,13 @@
     width: 60px;
     bottom: 120%;
     margin-left: -23px;
+}
+
+.three-dots {
+    position: relative;
+    display: block;
+    padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
+    font-size: var(--bs-pagination-font-size);
+    background-color: var(--bs-pagination-bg);
+    border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color);
 }

@@ -6,6 +6,7 @@ export default interface Options {
     maxVisibleElements?: number;
     showSlider?: boolean;
     showInput?: boolean;
+    goToButtonLabel?: string
     inputTitle?: string;
     enhancedMode?: boolean;
 };

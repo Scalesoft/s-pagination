@@ -76,3 +76,4 @@ yarn.lock
 
 #Build Files
 src/*.d.ts
+.idea/

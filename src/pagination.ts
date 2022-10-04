@@ -235,22 +235,20 @@ class Pagination {
             .addClass("input-group-sm")
             .addClass("pagination-input")
             .append(goToPageInput)
-            .append(inputGroupButtonSpan);
+            .append(goToPageButton);
 
         $(goToPageInput)
             .attr("type", "text")
             .addClass("form-control")
             .keypress(this.onGoToInputKeyPress.bind(this));
 
-        $(inputGroupButtonSpan)
-            .addClass("input-group-btn")
-            .append(goToPageButton);
+
 
         $(goToPageButton)
             .attr("type", "button")
             .addClass("btn")
-            .addClass("btn-default")
-            .append(goToPageIcon)
+            .addClass("btn-outline-secondary")
+            .append(this.options.goToButtonLabel)
             .click(this.onGoToPageButtonClick.bind(this));
 
         $(goToPageIcon)

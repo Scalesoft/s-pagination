@@ -179,7 +179,7 @@ var Pagination = /** @class */ (function () {
     };
     Pagination.prototype.createPageInput = function () {
         var inputGroupDiv = document.createElement("div");
-        var inputGroupButtonSpan = document.createElement("span");
+        document.createElement("span");
         var goToPageInput = document.createElement("input");
         var goToPageButton = document.createElement("button");
         var goToPageIcon = document.createElement("span");
@@ -188,19 +188,16 @@ var Pagination = /** @class */ (function () {
             .addClass("input-group-sm")
             .addClass("pagination-input")
             .append(goToPageInput)
-            .append(inputGroupButtonSpan);
+            .append(goToPageButton);
         $(goToPageInput)
             .attr("type", "text")
             .addClass("form-control")
             .keypress(this.onGoToInputKeyPress.bind(this));
-        $(inputGroupButtonSpan)
-            .addClass("input-group-btn")
-            .append(goToPageButton);
         $(goToPageButton)
             .attr("type", "button")
             .addClass("btn")
-            .addClass("btn-default")
-            .append(goToPageIcon)
+            .addClass("btn-outline-secondary")
+            .append(this.options.goToButtonLabel)
             .click(this.onGoToPageButtonClick.bind(this));
         $(goToPageIcon)
             .addClass("glyphicon")
