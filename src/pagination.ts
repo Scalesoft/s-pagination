@@ -223,7 +223,7 @@ class Pagination {
         
         goToPageInput.setAttribute("type", "text");
         goToPageInput.classList.add("form-control");
-        goToPageInput.addEventListener("click", (this.onGoToInputKeyPress.bind(this)));
+        goToPageInput.addEventListener("keydown", (this.onGoToInputKeyPress.bind(this)));
 
         inputGroupButtonSpan.classList.add("input-group-btn");
         inputGroupButtonSpan.append(goToPageButton);
@@ -268,8 +268,8 @@ class Pagination {
         this.goToPage(pageNumber);
     }
 
-    private onGoToInputKeyPress(event: JQueryEventObject) {
-        if (event.keyCode === 13) {
+    private onGoToInputKeyPress(event: KeyboardEvent) {
+        if (event.key === "Enter") {
             this.onGoToPageButtonClick();
         }
     }

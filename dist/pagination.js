@@ -187,7 +187,7 @@
             inputGroupDiv.append(inputGroupButtonSpan);
             goToPageInput.setAttribute("type", "text");
             goToPageInput.classList.add("form-control");
-            goToPageInput.addEventListener("click", (this.onGoToInputKeyPress.bind(this)));
+            goToPageInput.addEventListener("keydown", (this.onGoToInputKeyPress.bind(this)));
             inputGroupButtonSpan.classList.add("input-group-btn");
             inputGroupButtonSpan.append(goToPageButton);
             goToPageButton.setAttribute("type", "button");
@@ -222,7 +222,7 @@
             this.goToPage(pageNumber);
         };
         Pagination.prototype.onGoToInputKeyPress = function (event) {
-            if (event.keyCode === 13) {
+            if (event.key === "Enter") {
                 this.onGoToPageButtonClick();
             }
         };
