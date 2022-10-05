@@ -1,5 +1,5 @@
 export default interface Options {
-    container: HTMLDivElement | JQuery;
+    container: HTMLDivElement;
     callPageClickCallbackOnInit?: boolean;
     pageClickCallback?: (pageNumber: number) => void;
     pageClickUrl?: string | ((pageNumber: number) => string);

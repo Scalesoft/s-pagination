@@ -2,7 +2,7 @@ var Pagination = /** @class */ (function () {
     function Pagination(options) {
         this.usePaginationDots = false;
         this.options = options;
-        this.paginationContainer = $(options.container);
+        this.paginationContainer = options.container;
         this.maxVisibleElements = 13;
         if (options.maxVisibleElements) {
             this.maxVisibleElements = options.maxVisibleElements;
@@ -22,12 +22,14 @@ var Pagination = /** @class */ (function () {
             defaultPageNumber = 1;
         }
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
-        this.paginationContainer.empty();
-        var $innerContainer = $(document.createElement("div"));
-        $innerContainer.addClass("pagination-container");
-        if (this.options.showSlider) {
-            $innerContainer.append(this.createSlider());
+        while (this.paginationContainer.firstChild) {
+            this.paginationContainer.removeChild(this.paginationContainer.firstChild);
         }
+        var $innerContainer = document.createElement("div");
+        $innerContainer.classList.add("pagination-container");
+        // if (this.options.showSlider) {
+        //     $innerContainer.append(this.createSlider());
+        // }
         $innerContainer.append(this.createPageList());
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
@@ -58,24 +60,25 @@ var Pagination = /** @class */ (function () {
         this.currentPage = newPageNumber;
         this.updateVisiblePageElements();
         if (this.options.showInput && this.goToPageInput) {
-            $(this.goToPageInput).val(newPageNumber);
+            this.goToPageInput.value = newPageNumber.toString();
         }
-        if (this.options.showSlider && this.sliderDiv) {
-            var sliderElJq = $(this.sliderDiv);
-            if (sliderElJq.slider) {
-                sliderElJq.slider("value", newPageNumber);
-            }
-        }
-        $(this.sliderTipDiv).text(newPageNumber);
+        // if (this.options.showSlider && this.sliderDiv) {
+        //     const sliderElJq = $(this.sliderDiv);
+        //     if (sliderElJq.slider) {
+        //         sliderElJq.slider("value", newPageNumber);
+        //     }
+        // }
+        //
+        // $(this.sliderTipDiv).text(newPageNumber);
+        //
         if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
     };
     Pagination.prototype.createPageList = function () {
         var paginationUl = document.createElement("ul");
-        $(paginationUl)
-            .addClass("pagination")
-            .addClass("pagination-sm");
+        paginationUl.classList.add("pagination");
+        paginationUl.classList.add("pagination-sm");
         this.paginationUl = paginationUl;
         return paginationUl;
     };
@@ -84,22 +87,20 @@ var Pagination = /** @class */ (function () {
         pageLi.classList.add("page-item");
         var pageLink = document.createElement("a");
         pageLink.classList.add("page-link");
-        var $pageLink = $(pageLink);
-        $pageLink
-            .html(label)
-            .attr("data-page-number", pageNumber)
-            .click(this.onPageClick.bind(this));
+        var $pageLink = pageLink;
+        $pageLink.innerHTML = label;
+        $pageLink.setAttribute("data-page-number", pageNumber);
+        $pageLink.addEventListener("click", this.onPageClick.bind(this));
         var pageClickUrl = this.options.pageClickUrl;
         var hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
-        $pageLink.attr("href", hrefUrl);
+        $pageLink.setAttribute("href", hrefUrl);
         pageLi.appendChild(pageLink);
         return pageLi;
     };
     Pagination.prototype.createDotsPageElement = function () {
         var element = document.createElement("li");
-        $(element)
-            .addClass("disabled")
-            .addClass("three-dots");
+        element.classList.add("disabled");
+        element.classList.add("three-dots");
         var contentElement = document.createElement("span");
         contentElement.innerHTML = "&hellip;";
         element.appendChild(contentElement);
@@ -107,7 +108,7 @@ var Pagination = /** @class */ (function () {
     };
     Pagination.prototype.recreatePageElements = function (pageNumber) {
         var _this = this;
-        var $paginationUl = $(this.paginationUl);
+        var $paginationUl = this.paginationUl;
         var pageCount = this.pageCount;
         var isEnhanced = this.options.enhancedMode;
         var previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
@@ -121,7 +122,9 @@ var Pagination = /** @class */ (function () {
             }
             $paginationUl.append(pageLi);
         };
-        $paginationUl.empty();
+        while ($paginationUl.firstChild) {
+            $paginationUl.removeChild($paginationUl.firstChild);
+        }
         if (pageCount <= this.maxVisibleElements - 2) {
             $paginationUl.append(previousPageLi);
             for (var i = 1; i <= pageCount; i++) {
@@ -183,80 +186,84 @@ var Pagination = /** @class */ (function () {
         var goToPageInput = document.createElement("input");
         var goToPageButton = document.createElement("button");
         var goToPageIcon = document.createElement("span");
-        $(inputGroupDiv)
-            .addClass("input-group")
-            .addClass("input-group-sm")
-            .addClass("pagination-input")
-            .append(goToPageInput)
-            .append(inputGroupButtonSpan);
-        $(goToPageInput)
-            .attr("type", "text")
-            .addClass("form-control")
-            .keypress(this.onGoToInputKeyPress.bind(this));
-        $(inputGroupButtonSpan)
-            .addClass("input-group-btn")
-            .append(goToPageButton);
-        $(goToPageButton)
-            .attr("type", "button")
-            .addClass("btn")
-            .addClass("btn-default")
-            .append(goToPageIcon)
-            .click(this.onGoToPageButtonClick.bind(this));
-        $(goToPageIcon)
-            .addClass("glyphicon")
-            .addClass("glyphicon-arrow-right");
+        inputGroupDiv.classList.add("input-group");
+        inputGroupDiv.classList.add("input-group-sm");
+        inputGroupDiv.classList.add("pagination-input");
+        inputGroupDiv.append(goToPageInput);
+        inputGroupDiv.append(inputGroupButtonSpan);
+        goToPageInput.setAttribute("type", "text");
+        goToPageInput.classList.add("form-control");
+        goToPageInput.addEventListener("click", (this.onGoToInputKeyPress.bind(this)));
+        inputGroupButtonSpan.classList.add("input-group-btn");
+        inputGroupButtonSpan.append(goToPageButton);
+        goToPageButton.setAttribute("type", "button");
+        goToPageButton.classList.add("btn");
+        goToPageButton.classList.add("btn-default");
+        goToPageButton.append(goToPageIcon);
+        goToPageButton.addEventListener("click", this.onGoToPageButtonClick.bind(this));
+        goToPageIcon.classList.add("glyphicon");
+        goToPageIcon.classList.add("glyphicon-arrow-right");
         if (this.options.inputTitle) {
-            $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
+            goToPageInput.setAttribute("title", this.options.inputTitle);
+            goToPageButton.setAttribute("title", this.options.inputTitle);
         }
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     };
-    Pagination.prototype.createSlider = function () {
-        var sliderContainer = document.createElement("div");
-        var slider = document.createElement("div");
-        var tooltip = document.createElement("div");
-        var tooltipArrow = document.createElement("div");
-        var tooltipInner = document.createElement("div");
-        var showSliderTip = function () {
-            $(tooltip).stop(true, true).show();
-        };
-        var hideSliderTip = function () {
-            $(tooltip).fadeOut(600);
-        };
-        $(sliderContainer)
-            .addClass("pagination-slider")
-            .append(slider);
-        $(slider).slider({
-            min: 1,
-            max: this.pageCount,
-            change: this.onSliderChange.bind(this),
-            start: showSliderTip,
-            stop: hideSliderTip,
-            slide: function (event, ui) {
-                showSliderTip();
-                $(tooltipInner).text(ui.value);
-            },
-        });
-        $(tooltip)
-            .addClass("tooltip")
-            .addClass("top")
-            .addClass("pagination-tooltip")
-            .append(tooltipArrow)
-            .append(tooltipInner)
-            .hide();
-        $(tooltipArrow).addClass("tooltip-arrow");
-        $(tooltipInner).addClass("tooltip-inner");
-        $(".ui-slider-handle", slider)
-            .addClass("pagination-slider-handle")
-            .append(tooltip)
-            .hover(showSliderTip)
-            .mouseout(hideSliderTip);
-        this.sliderDiv = slider;
-        this.sliderTipDiv = tooltipInner;
-        return sliderContainer;
-    };
+    // private createSlider(): HTMLDivElement {
+    //     const sliderContainer = document.createElement("div");
+    //     const slider = document.createElement("div");
+    //
+    //     const tooltip = document.createElement("div");
+    //     const tooltipArrow = document.createElement("div");
+    //     const tooltipInner = document.createElement("div");
+    //
+    //     const showSliderTip = () => {
+    //         $(tooltip).stop(true, true).show();
+    //     };
+    //     const hideSliderTip = () => {
+    //         $(tooltip).fadeOut(600);
+    //     };
+    //
+    //     $(sliderContainer)
+    //         .addClass("pagination-slider")
+    //         .append(slider);
+    //
+    //     $(slider).slider({
+    //         min: 1,
+    //         max: this.pageCount,
+    //         change: this.onSliderChange.bind(this),
+    //         start: showSliderTip,
+    //         stop: hideSliderTip,
+    //         slide: (event, ui) => {
+    //             showSliderTip();
+    //             $(tooltipInner).text(ui.value);
+    //         },
+    //     });
+    //
+    //     $(tooltip)
+    //         .addClass("tooltip")
+    //         .addClass("top")
+    //         .addClass("pagination-tooltip")
+    //         .append(tooltipArrow)
+    //         .append(tooltipInner)
+    //         .hide();
+    //
+    //     $(tooltipArrow).addClass("tooltip-arrow");
+    //     $(tooltipInner).addClass("tooltip-inner");
+    //
+    //     $(".ui-slider-handle", slider)
+    //         .addClass("pagination-slider-handle")
+    //         .append(tooltip)
+    //         .hover(showSliderTip)
+    //         .mouseout(hideSliderTip);
+    //
+    //     this.sliderDiv = slider;
+    //     this.sliderTipDiv = tooltipInner;
+    //     return sliderContainer;
+    // }
     Pagination.prototype.onPageClick = function (event) {
-        var pageValue = $(event.target).data("page-number");
+        var pageValue = event.target.dataset.pageNumber;
         var pageNumber = Number(pageValue);
         if (this.options.pageClickUrl) {
             if (this.options.pageClickCallback) {
@@ -268,7 +275,7 @@ var Pagination = /** @class */ (function () {
         this.updateCurrentPage(pageNumber, true);
     };
     Pagination.prototype.onGoToPageButtonClick = function () {
-        var pageNumberData = $(this.goToPageInput).val();
+        var pageNumberData = this.goToPageInput.value;
         var pageNumber = Number(pageNumberData);
         this.goToPage(pageNumber);
     };

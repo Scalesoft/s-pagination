@@ -2,7 +2,7 @@ import Options from "./pagination.options";
 
 class Pagination {
     private options: Options;
-    private paginationContainer: JQuery;
+    private paginationContainer: HTMLElement;
     private maxVisibleElements: number;
     private pageCount: number;
     private currentPage: number;
@@ -14,7 +14,7 @@ class Pagination {
 
     constructor(options: Options) {
         this.options = options;
-        this.paginationContainer = $(options.container);
+        this.paginationContainer = options.container;
 
         this.maxVisibleElements = 13;
         if (options.maxVisibleElements) {
@@ -38,14 +38,14 @@ class Pagination {
 
         this.pageCount = Math.ceil(itemsCount / itemsOnPage);
 
-        this.paginationContainer.empty();
+        while (this.paginationContainer.firstChild) {this.paginationContainer.removeChild(this.paginationContainer.firstChild)}
 
-        const $innerContainer = $(document.createElement("div"));
-        $innerContainer.addClass("pagination-container");
+        const $innerContainer = document.createElement("div");
+        $innerContainer.classList.add("pagination-container");
 
-        if (this.options.showSlider) {
-            $innerContainer.append(this.createSlider());
-        }
+        // if (this.options.showSlider) {
+        //     $innerContainer.append(this.createSlider());
+        // }
         $innerContainer.append(this.createPageList());
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
@@ -84,18 +84,17 @@ class Pagination {
         this.updateVisiblePageElements();
 
         if (this.options.showInput && this.goToPageInput) {
-            $(this.goToPageInput).val(newPageNumber);
+            this.goToPageInput.value = newPageNumber.toString();
         }
-
-        if (this.options.showSlider && this.sliderDiv) {
-            const sliderElJq = $(this.sliderDiv);
-            if (sliderElJq.slider) {
-                sliderElJq.slider("value", newPageNumber);
-            }
-        }
-
-        $(this.sliderTipDiv).text(newPageNumber);
-
+        // if (this.options.showSlider && this.sliderDiv) {
+        //     const sliderElJq = $(this.sliderDiv);
+        //     if (sliderElJq.slider) {
+        //         sliderElJq.slider("value", newPageNumber);
+        //     }
+        // }
+        //
+        // $(this.sliderTipDiv).text(newPageNumber);
+        //
         if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
@@ -103,9 +102,8 @@ class Pagination {
 
     private createPageList(): HTMLUListElement {
         const paginationUl = document.createElement("ul");
-        $(paginationUl)
-            .addClass("pagination")
-            .addClass("pagination-sm");
+        paginationUl.classList.add("pagination");
+        paginationUl.classList.add("pagination-sm");
 
         this.paginationUl = paginationUl;
         return paginationUl;
@@ -116,15 +114,15 @@ class Pagination {
         pageLi.classList.add("page-item");
         const pageLink = document.createElement("a");
         pageLink.classList.add("page-link");
-        const $pageLink = $(pageLink);
-        $pageLink
-            .html(label)
-            .attr("data-page-number", pageNumber)
-            .click(this.onPageClick.bind(this));
-
+        const $pageLink = pageLink;
+        $pageLink.innerHTML = label;
+        $pageLink.setAttribute("data-page-number", pageNumber)
+        $pageLink.addEventListener("click",this.onPageClick.bind(this));
+        
+        
         const pageClickUrl = this.options.pageClickUrl;
         const hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
-        $pageLink.attr("href", hrefUrl);
+        $pageLink.setAttribute("href", hrefUrl);
 
         pageLi.appendChild(pageLink);
         return pageLi;
@@ -132,9 +130,8 @@ class Pagination {
 
     private createDotsPageElement(): HTMLLIElement {
         const element = document.createElement("li");
-        $(element)
-            .addClass("disabled")
-            .addClass("three-dots");
+        element.classList.add("disabled");
+        element.classList.add("three-dots");
 
         const contentElement = document.createElement("span");
         contentElement.innerHTML = "&hellip;";
@@ -144,7 +141,7 @@ class Pagination {
     }
 
     private recreatePageElements(pageNumber: number) {
-        const $paginationUl = $(this.paginationUl);
+        const $paginationUl = this.paginationUl;
         const pageCount = this.pageCount;
         const isEnhanced = this.options.enhancedMode;
         const previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
@@ -158,9 +155,9 @@ class Pagination {
             }
             $paginationUl.append(pageLi);
         };
-
-        $paginationUl.empty();
-
+        
+        while ($paginationUl.firstChild) {$paginationUl.removeChild($paginationUl.firstChild)}
+        
         if (pageCount <= this.maxVisibleElements - 2) {
             $paginationUl.append(previousPageLi);
             for (let i = 1; i <= pageCount; i++) {
@@ -230,96 +227,94 @@ class Pagination {
         const goToPageButton = document.createElement("button");
         const goToPageIcon = document.createElement("span");
 
-        $(inputGroupDiv)
-            .addClass("input-group")
-            .addClass("input-group-sm")
-            .addClass("pagination-input")
-            .append(goToPageInput)
-            .append(inputGroupButtonSpan);
+        
+        inputGroupDiv.classList.add("input-group");
+        inputGroupDiv.classList.add("input-group-sm");
+        inputGroupDiv.classList.add("pagination-input");
+        inputGroupDiv.append(goToPageInput);
+        inputGroupDiv.append(inputGroupButtonSpan);
+        
+        goToPageInput.setAttribute("type", "text");
+        goToPageInput.classList.add("form-control");
+        goToPageInput.addEventListener("click", (this.onGoToInputKeyPress.bind(this)));
 
-        $(goToPageInput)
-            .attr("type", "text")
-            .addClass("form-control")
-            .keypress(this.onGoToInputKeyPress.bind(this));
+        inputGroupButtonSpan.classList.add("input-group-btn");
+        inputGroupButtonSpan.append(goToPageButton);
+        
+        goToPageButton.setAttribute("type", "button");
+        goToPageButton.classList.add("btn");
+        goToPageButton.classList.add("btn-default");
+        goToPageButton.append(goToPageIcon);
+        goToPageButton.addEventListener("click", this.onGoToPageButtonClick.bind(this));
 
-        $(inputGroupButtonSpan)
-            .addClass("input-group-btn")
-            .append(goToPageButton);
-
-        $(goToPageButton)
-            .attr("type", "button")
-            .addClass("btn")
-            .addClass("btn-default")
-            .append(goToPageIcon)
-            .click(this.onGoToPageButtonClick.bind(this));
-
-        $(goToPageIcon)
-            .addClass("glyphicon")
-            .addClass("glyphicon-arrow-right");
+       
+        goToPageIcon.classList.add("glyphicon");
+        goToPageIcon.classList.add("glyphicon-arrow-right");
 
         if (this.options.inputTitle) {
-            $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
+            goToPageInput.setAttribute("title", this.options.inputTitle);
+            goToPageButton.setAttribute("title", this.options.inputTitle);
         }
 
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     }
 
-    private createSlider(): HTMLDivElement {
-        const sliderContainer = document.createElement("div");
-        const slider = document.createElement("div");
+    // private createSlider(): HTMLDivElement {
+    //     const sliderContainer = document.createElement("div");
+    //     const slider = document.createElement("div");
+    //
+    //     const tooltip = document.createElement("div");
+    //     const tooltipArrow = document.createElement("div");
+    //     const tooltipInner = document.createElement("div");
+    //
+    //     const showSliderTip = () => {
+    //         $(tooltip).stop(true, true).show();
+    //     };
+    //     const hideSliderTip = () => {
+    //         $(tooltip).fadeOut(600);
+    //     };
+    //
+    //     $(sliderContainer)
+    //         .addClass("pagination-slider")
+    //         .append(slider);
+    //
+    //     $(slider).slider({
+    //         min: 1,
+    //         max: this.pageCount,
+    //         change: this.onSliderChange.bind(this),
+    //         start: showSliderTip,
+    //         stop: hideSliderTip,
+    //         slide: (event, ui) => {
+    //             showSliderTip();
+    //             $(tooltipInner).text(ui.value);
+    //         },
+    //     });
+    //
+    //     $(tooltip)
+    //         .addClass("tooltip")
+    //         .addClass("top")
+    //         .addClass("pagination-tooltip")
+    //         .append(tooltipArrow)
+    //         .append(tooltipInner)
+    //         .hide();
+    //
+    //     $(tooltipArrow).addClass("tooltip-arrow");
+    //     $(tooltipInner).addClass("tooltip-inner");
+    //
+    //     $(".ui-slider-handle", slider)
+    //         .addClass("pagination-slider-handle")
+    //         .append(tooltip)
+    //         .hover(showSliderTip)
+    //         .mouseout(hideSliderTip);
+    //
+    //     this.sliderDiv = slider;
+    //     this.sliderTipDiv = tooltipInner;
+    //     return sliderContainer;
+    // }
 
-        const tooltip = document.createElement("div");
-        const tooltipArrow = document.createElement("div");
-        const tooltipInner = document.createElement("div");
-
-        const showSliderTip = () => {
-            $(tooltip).stop(true, true).show();
-        };
-        const hideSliderTip = () => {
-            $(tooltip).fadeOut(600);
-        };
-
-        $(sliderContainer)
-            .addClass("pagination-slider")
-            .append(slider);
-
-        $(slider).slider({
-            min: 1,
-            max: this.pageCount,
-            change: this.onSliderChange.bind(this),
-            start: showSliderTip,
-            stop: hideSliderTip,
-            slide: (event, ui) => {
-                showSliderTip();
-                $(tooltipInner).text(ui.value);
-            },
-        });
-
-        $(tooltip)
-            .addClass("tooltip")
-            .addClass("top")
-            .addClass("pagination-tooltip")
-            .append(tooltipArrow)
-            .append(tooltipInner)
-            .hide();
-
-        $(tooltipArrow).addClass("tooltip-arrow");
-        $(tooltipInner).addClass("tooltip-inner");
-
-        $(".ui-slider-handle", slider)
-            .addClass("pagination-slider-handle")
-            .append(tooltip)
-            .hover(showSliderTip)
-            .mouseout(hideSliderTip);
-
-        this.sliderDiv = slider;
-        this.sliderTipDiv = tooltipInner;
-        return sliderContainer;
-    }
-
-    private onPageClick(event: JQueryEventObject) {
-        const pageValue = $(event.target).data("page-number");
+    private onPageClick(event: any) {
+        const pageValue = event.target.dataset.pageNumber;
         const pageNumber = Number(pageValue);
 
         if (this.options.pageClickUrl) {
@@ -334,7 +329,7 @@ class Pagination {
     }
 
     private onGoToPageButtonClick() {
-        const pageNumberData = $(this.goToPageInput).val();
+        const pageNumberData = this.goToPageInput.value;
         const pageNumber = Number(pageNumberData);
         this.goToPage(pageNumber);
     }
