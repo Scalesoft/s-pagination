@@ -72,8 +72,6 @@ packages/
 #NPM
 node_modules/
 
-yarn.lock
-
 #Build Files
 src/*.d.ts
 .idea/
