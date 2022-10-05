@@ -9,8 +9,7 @@
   "types": "dist/types/pagination.d.ts",
   "keywords": [
     "pagination",
-    "pager",
-    "slider"
+    "pager"
   ],
   "repository": {
     "type": "git",
@@ -27,14 +26,10 @@
     "build": "rollup -c rollup.config.js"
   },
   "dependencies": {
-    "bootstrap": "^4.0",
-    "jquery": "^3.3.1",
-    "jquery-ui-dist": "^1.12.1"
+    "bootstrap": "^4.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@types/jquery": "^3.3.10",
-    "@types/jqueryui": "^1.12.4",
     "popper.js": "^1.14.5",
     "rollup": "^2.67.0",
     "rollup-plugin-copy": "^3.4.0",
