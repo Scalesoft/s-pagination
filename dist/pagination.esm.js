@@ -27,9 +27,6 @@ var Pagination = /** @class */ (function () {
         }
         var $innerContainer = document.createElement("div");
         $innerContainer.classList.add("pagination-container");
-        // if (this.options.showSlider) {
-        //     $innerContainer.append(this.createSlider());
-        // }
         $innerContainer.append(this.createPageList());
         if (this.options.showInput) {
             $innerContainer.append(this.createPageInput());
@@ -62,15 +59,6 @@ var Pagination = /** @class */ (function () {
         if (this.options.showInput && this.goToPageInput) {
             this.goToPageInput.value = newPageNumber.toString();
         }
-        // if (this.options.showSlider && this.sliderDiv) {
-        //     const sliderElJq = $(this.sliderDiv);
-        //     if (sliderElJq.slider) {
-        //         sliderElJq.slider("value", newPageNumber);
-        //     }
-        // }
-        //
-        // $(this.sliderTipDiv).text(newPageNumber);
-        //
         if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
@@ -210,58 +198,6 @@ var Pagination = /** @class */ (function () {
         this.goToPageInput = goToPageInput;
         return inputGroupDiv;
     };
-    // private createSlider(): HTMLDivElement {
-    //     const sliderContainer = document.createElement("div");
-    //     const slider = document.createElement("div");
-    //
-    //     const tooltip = document.createElement("div");
-    //     const tooltipArrow = document.createElement("div");
-    //     const tooltipInner = document.createElement("div");
-    //
-    //     const showSliderTip = () => {
-    //         $(tooltip).stop(true, true).show();
-    //     };
-    //     const hideSliderTip = () => {
-    //         $(tooltip).fadeOut(600);
-    //     };
-    //
-    //     $(sliderContainer)
-    //         .addClass("pagination-slider")
-    //         .append(slider);
-    //
-    //     $(slider).slider({
-    //         min: 1,
-    //         max: this.pageCount,
-    //         change: this.onSliderChange.bind(this),
-    //         start: showSliderTip,
-    //         stop: hideSliderTip,
-    //         slide: (event, ui) => {
-    //             showSliderTip();
-    //             $(tooltipInner).text(ui.value);
-    //         },
-    //     });
-    //
-    //     $(tooltip)
-    //         .addClass("tooltip")
-    //         .addClass("top")
-    //         .addClass("pagination-tooltip")
-    //         .append(tooltipArrow)
-    //         .append(tooltipInner)
-    //         .hide();
-    //
-    //     $(tooltipArrow).addClass("tooltip-arrow");
-    //     $(tooltipInner).addClass("tooltip-inner");
-    //
-    //     $(".ui-slider-handle", slider)
-    //         .addClass("pagination-slider-handle")
-    //         .append(tooltip)
-    //         .hover(showSliderTip)
-    //         .mouseout(hideSliderTip);
-    //
-    //     this.sliderDiv = slider;
-    //     this.sliderTipDiv = tooltipInner;
-    //     return sliderContainer;
-    // }
     Pagination.prototype.onPageClick = function (event) {
         var pageValue = event.target.dataset.pageNumber;
         var pageNumber = Number(pageValue);
@@ -282,11 +218,6 @@ var Pagination = /** @class */ (function () {
     Pagination.prototype.onGoToInputKeyPress = function (event) {
         if (event.keyCode === 13) {
             this.onGoToPageButtonClick();
-        }
-    };
-    Pagination.prototype.onSliderChange = function (event, ui) {
-        if (ui.value !== this.currentPage) {
-            this.goToPage(ui.value);
         }
     };
     Pagination.prototype.createPageClickUrl = function (pageNumber) {

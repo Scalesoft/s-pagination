@@ -4,7 +4,6 @@ export default interface Options {
     pageClickCallback?: (pageNumber: number) => void;
     pageClickUrl?: string | ((pageNumber: number) => string);
     maxVisibleElements?: number;
-    showSlider?: boolean;
     showInput?: boolean;
     inputTitle?: string;
     enhancedMode?: boolean;
