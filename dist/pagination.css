@@ -34,6 +34,7 @@
 .three-dots {
     position: relative;
     display: block;
+    cursor: not-allowed;
     padding: var(--bs-pagination-padding-y) var(--bs-pagination-padding-x);
     font-size: var(--bs-pagination-font-size);
     background-color: var(--bs-pagination-bg);
