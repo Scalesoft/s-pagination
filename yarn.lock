@@ -81,20 +81,6 @@
     "@types/minimatch" "*"
     "@types/node" "*"
 
-"@types/jquery@*", "@types/jquery@^3.3.10":
-  version "3.5.14"
-  resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/@types/jquery/-/jquery-3.5.14.tgz#ac8e11ee591e94d4d58da602cb3a5a8320dee577"
-  integrity sha512-X1gtMRMbziVQkErhTQmSe2jFwwENA/Zr+PprCkF63vFq+Yt5PZ4AlKqgmeNlwgn7dhsXEK888eIW2520EpC+xg==
-  dependencies:
-    "@types/sizzle" "*"
-
-"@types/jqueryui@^1.12.4":
-  version "1.12.16"
-  resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/@types/jqueryui/-/jqueryui-1.12.16.tgz#9e319f7db39490db950cba77fe83887e0ad3e1d9"
-  integrity sha512-6huAQDpNlso9ayaUT9amBOA3kj02OCeUWs+UvDmbaJmwkHSg/HLsQOoap/D5uveN9ePwl72N45Bl+Frp5xyG1Q==
-  dependencies:
-    "@types/jquery" "*"
-
 "@types/minimatch@*":
   version "5.1.2"
   resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/@types/minimatch/-/minimatch-5.1.2.tgz#07508b45797cb81ec3f273011b054cd0755eddca"
@@ -104,11 +90,6 @@
   version "18.8.2"
   resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/@types/node/-/node-18.8.2.tgz#17d42c6322d917764dd3d2d3a10d7884925de067"
   integrity sha512-cRMwIgdDN43GO4xMWAfJAecYn8wV4JbsOGHNfNUIDiuYkUYAR5ec4Rj7IO2SAhFPEfpPtLtUTbbny/TCT7aDwA==
-
-"@types/sizzle@*":
-  version "2.3.3"
-  resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/@types/sizzle/-/sizzle-2.3.3.tgz#ff5e2f1902969d305225a047c8a0fd5c915cebef"
-  integrity sha512-JYM8x9EGF163bEyhdJBpR2QX1R5naCJHC8ucJylJ3w9/CVBaskdQ8WqBf8MmQrd1kRvp/a4TS8HJ+bxzR7ZJYQ==
 
 ansi-styles@^3.2.1:
   version "3.2.1"
@@ -367,18 +348,6 @@ is-plain-object@^3.0.0:
   version "3.0.1"
   resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/is-plain-object/-/is-plain-object-3.0.1.tgz#662d92d24c0aa4302407b0d45d21f2251c85f85b"
   integrity sha512-Xnpx182SBMrr/aBik8y+GuR4U1L9FqMSojwDQwPMmxyC6bvEqly9UBCxhauBF5vNh2gwWJNX6oDV7O+OM4z34g==
-
-jquery-ui-dist@^1.12.1:
-  version "1.13.2"
-  resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/jquery-ui-dist/-/jquery-ui-dist-1.13.2.tgz#899fbb3c6210de19ace10657cf844a3b97f3be70"
-  integrity sha512-oVDRd1NLtTbBwpRKAYdIRgpWVDzeBhfy7Gu0RmY6JEaZtmBq6kDn1pm5SgDiAotrnDS+RoTRXO6xvcNTxA9tOA==
-  dependencies:
-    jquery ">=1.8.0 <4.0.0"
-
-"jquery@>=1.8.0 <4.0.0", jquery@^3.3.1:
-  version "3.6.1"
-  resolved "https://nexus-repository.devscale.cz/repository/Default-NPM/jquery/-/jquery-3.6.1.tgz#fab0408f8b45fc19f956205773b62b292c147a16"
-  integrity sha512-opJeO4nCucVnsjiXOE+/PcCgYw9Gwpvs/a6B1LL/lQhwWwpbVEVYDZ1FokFr8PRc7ghYlrFPuyHuiiDNTQxmcw==
 
 js-tokens@^4.0.0:
   version "4.0.0"

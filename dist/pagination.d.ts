@@ -7,8 +7,6 @@ declare class Pagination {
     private currentPage;
     private paginationUl;
     private goToPageInput;
-    private sliderDiv;
-    private sliderTipDiv;
     constructor(options: Options);
     make(itemsCount: number, itemsOnPage: number, defaultPageNumber?: number): void;
     goToPage(pageNumber: number): void;
@@ -21,11 +19,9 @@ declare class Pagination {
     private recreatePageElements;
     private updateVisiblePageElements;
     private createPageInput;
-    private createSlider;
     private onPageClick;
     private onGoToPageButtonClick;
     private onGoToInputKeyPress;
-    private onSliderChange;
     private createPageClickUrl;
 }
 export default Pagination;

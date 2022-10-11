@@ -4,14 +4,8 @@
 <head>
     <meta charset="utf-8" />
     <title>S-Pagination DEMO</title>
-    <!--<script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/jquery-ui/jquery-ui.min.js"></script>-->
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="dist/pagination.js"></script>
-    <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> 
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="dist/pagination.css" />
     <style>
         body {
@@ -45,7 +39,7 @@
     </div>
     <hr/>
     
-    <h3>Pagination with slider and limited elements count</h3>
+    <h3>Pagination with limited elements count</h3>
     <div>
         <samp>
             <span>Current page:</span>
@@ -92,41 +86,41 @@
     
 <script>
     function pageClick1(pageNumber) {
-        $("#page-number-1").text(pageNumber);
+        document.getElementById("page-number-1").innerText = pageNumber;
     }
 
     function pageClick2(pageNumber) {
-        $("#page-number-2").text(pageNumber);
+        document.getElementById("page-number-2").innerText = pageNumber;
     }
 
     function pageClick3(pageNumber) {
-        $("#page-number-3").text(pageNumber);
+        document.getElementById("page-number-3").innerText = pageNumber;
     }
 
     function pageClick4(pageNumber) {
-        $("#page-number-4").text(pageNumber);
+        document.getElementById("page-number-4").innerText = pageNumber;
     }
 
     function pageClickAll(pageNumber) {
-        $("#page-number-all").text(pageNumber);
+        document.getElementById("page-number-all").innerText = pageNumber;
     }
 
     function pageClick5(pageNumber) {
-        $("#page-number-5").text(pageNumber);
+        document.getElementById("page-number-5").innerText = pageNumber;
     }
 
-    $(document).ready(function () {
+    document.addEventListener("DOMContentLoaded", function () {
         var itemsCount = 300;
         var itemsOnPage = 10;
 
         var pagination1 = new Pagination({
-            container: $("#pagination-1"),
+            container: document.getElementById("pagination-1"),
             pageClickCallback: pageClick1
         });
         pagination1.make(itemsCount, itemsOnPage);
 
         var pagination2 = new Pagination({
-            container: $("#pagination-2"),
+            container:  document.getElementById("pagination-2"),
             pageClickCallback: pageClick2,
             maxVisibleElements: 9,
             showInput: true,
@@ -136,26 +130,24 @@
         pagination2.make(itemsCount, itemsOnPage);
 
         var pagination3 = new Pagination({
-            container: $("#pagination-3"),
+            container:  document.getElementById("pagination-3"),
             pageClickCallback: pageClick3,
             maxVisibleElements: 9,
-            showSlider: true
         });
         pagination3.make(itemsCount, itemsOnPage);
 
         var pagination4 = new Pagination({
-            container: $("#pagination-4"),
+            container:  document.getElementById("pagination-4"),
             pageClickCallback: pageClick4,
             enhancedMode: true
         });
         pagination4.make(itemsCount, itemsOnPage);
 
         var paginationAll = new Pagination({
-            container: $("#pagination-all"),
+            container:  document.getElementById("pagination-all"),
             pageClickCallback: pageClickAll,
             callPageClickCallbackOnInit: true,
             showInput: true,
-            showSlider: true,
             enhancedMode: true,
             maxVisibleElements: 20,
             inputTitle: "Go to page"
@@ -173,13 +165,12 @@
         }
 
         var pagination5 = new Pagination({
-            container: $("#pagination-5"),
+            container:  document.getElementById("pagination-5"),
             pageClickUrl: "?page={{page}}",
             //pageClickUrl: function(num) { return "?page=" + num; },
             pageClickCallback: pageClick5,
             callPageClickCallbackOnInit: true,
             showInput: true,
-            showSlider: true,
             enhancedMode: true,
             maxVisibleElements: 20,
             inputTitle: "Go to page"
