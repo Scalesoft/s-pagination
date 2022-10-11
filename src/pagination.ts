@@ -6,7 +6,6 @@ class Pagination {
     private maxVisibleElements: number;
     private pageCount: number;
     private currentPage: number;
-    private usePaginationDots = false;
     private paginationUl: HTMLUListElement;
     private goToPageInput: HTMLInputElement;
 
@@ -40,7 +39,7 @@ class Pagination {
 
         const innerContainer = document.createElement("div");
         innerContainer.classList.add("pagination-container");
-        
+
         innerContainer.append(this.createPageList());
         if (this.options.showInput) {
             innerContainer.append(this.createPageInput());
@@ -81,7 +80,7 @@ class Pagination {
         if (this.options.showInput && this.goToPageInput) {
             this.goToPageInput.value = newPageNumber.toString();
         }
-        
+
         if (callPageClickCallback && this.options.pageClickCallback) {
             this.options.pageClickCallback(newPageNumber);
         }
@@ -104,8 +103,8 @@ class Pagination {
         pageLink.innerHTML = label;
         pageLink.setAttribute("data-page-number", pageNumber)
         pageLink.addEventListener("click",this.onPageClick.bind(this));
-        
-        
+
+
         const pageClickUrl = this.options.pageClickUrl;
         const hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
         pageLink.setAttribute("href", hrefUrl);
@@ -140,9 +139,9 @@ class Pagination {
             }
             this.paginationUl.append(pageLi);
         };
-        
+
         while (this.paginationUl.firstChild) {this.paginationUl.removeChild(this.paginationUl.firstChild)}
-        
+
         if (pageCount <= this.maxVisibleElements - 2) {
             this.paginationUl.append(previousPageLi);
             for (let i = 1; i <= pageCount; i++) {
@@ -207,34 +206,25 @@ class Pagination {
 
     private createPageInput(): HTMLDivElement {
         const inputGroupDiv = document.createElement("div");
-        const inputGroupButtonSpan = document.createElement("span");
         const goToPageInput = document.createElement("input");
         const goToPageButton = document.createElement("button");
-        const goToPageIcon = document.createElement("span");
 
-        
+
         inputGroupDiv.classList.add("input-group");
         inputGroupDiv.classList.add("input-group-sm");
         inputGroupDiv.classList.add("pagination-input");
         inputGroupDiv.append(goToPageInput);
-        inputGroupDiv.append(inputGroupButtonSpan);
-        
+        inputGroupDiv.append(goToPageButton);
+
         goToPageInput.setAttribute("type", "text");
         goToPageInput.classList.add("form-control");
         goToPageInput.addEventListener("keydown", (this.onGoToInputKeyPress.bind(this)));
 
-        inputGroupButtonSpan.classList.add("input-group-btn");
-        inputGroupButtonSpan.append(goToPageButton);
-        
         goToPageButton.setAttribute("type", "button");
         goToPageButton.classList.add("btn");
-        goToPageButton.classList.add("btn-default");
-        goToPageButton.append(goToPageIcon);
+        goToPageButton.classList.add("btn-outline-secondary");
+        goToPageButton.append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel);
         goToPageButton.addEventListener("click", this.onGoToPageButtonClick.bind(this));
-
-       
-        goToPageIcon.classList.add("glyphicon");
-        goToPageIcon.classList.add("glyphicon-arrow-right");
 
         if (this.options.inputTitle) {
             goToPageInput.setAttribute("title", this.options.inputTitle);
@@ -271,7 +261,7 @@ class Pagination {
             this.onGoToPageButtonClick();
         }
     }
-    
+
     private createPageClickUrl(pageNumber: number): string {
         const pageClickUrl = this.options.pageClickUrl;
         switch (typeof pageClickUrl) {

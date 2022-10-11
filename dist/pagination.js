@@ -6,7 +6,6 @@
 
     var Pagination = /** @class */ (function () {
         function Pagination(options) {
-            this.usePaginationDots = false;
             this.options = options;
             this.paginationContainer = options.container;
             this.maxVisibleElements = 13;
@@ -174,27 +173,21 @@
         };
         Pagination.prototype.createPageInput = function () {
             var inputGroupDiv = document.createElement("div");
-            var inputGroupButtonSpan = document.createElement("span");
             var goToPageInput = document.createElement("input");
             var goToPageButton = document.createElement("button");
-            var goToPageIcon = document.createElement("span");
             inputGroupDiv.classList.add("input-group");
             inputGroupDiv.classList.add("input-group-sm");
             inputGroupDiv.classList.add("pagination-input");
             inputGroupDiv.append(goToPageInput);
-            inputGroupDiv.append(inputGroupButtonSpan);
+            inputGroupDiv.append(goToPageButton);
             goToPageInput.setAttribute("type", "text");
             goToPageInput.classList.add("form-control");
             goToPageInput.addEventListener("keydown", (this.onGoToInputKeyPress.bind(this)));
-            inputGroupButtonSpan.classList.add("input-group-btn");
-            inputGroupButtonSpan.append(goToPageButton);
             goToPageButton.setAttribute("type", "button");
             goToPageButton.classList.add("btn");
-            goToPageButton.classList.add("btn-default");
-            goToPageButton.append(goToPageIcon);
+            goToPageButton.classList.add("btn-outline-secondary");
+            goToPageButton.append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel);
             goToPageButton.addEventListener("click", this.onGoToPageButtonClick.bind(this));
-            goToPageIcon.classList.add("glyphicon");
-            goToPageIcon.classList.add("glyphicon-arrow-right");
             if (this.options.inputTitle) {
                 goToPageInput.setAttribute("title", this.options.inputTitle);
                 goToPageButton.setAttribute("title", this.options.inputTitle);

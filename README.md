@@ -51,4 +51,4 @@ The library is configured by object passed in the constructor:
 * getCurrentPage() - Returns current page number.
 
 ## Changes
-Added support for Bootstrap v4.x
+Added support for Bootstrap v5.x

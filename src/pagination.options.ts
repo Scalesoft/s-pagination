@@ -5,6 +5,7 @@ export default interface Options {
     pageClickUrl?: string | ((pageNumber: number) => string);
     maxVisibleElements?: number;
     showInput?: boolean;
+    goToButtonLabel?: string
     inputTitle?: string;
     enhancedMode?: boolean;
 };
