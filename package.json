@@ -1,12 +1,12 @@
 {
-  "version": "2.2.0",
+  "version": "2.2.1",
   "name": "s-pagination",
   "description": "A JavaScript library for pagination with slider support using Bootstrap and jQuery UI components.",
   "license": "MIT",
   "author": "Scalesoft s.r.o.",
   "main": "dist/pagination.esm.js",
   "module": "dist/pagination.esm.js",
-  "types": "dist/types/pagination.d.ts",
+  "types": "dist/pagination.d.ts",
   "keywords": [
     "pagination",
     "pager",
@@ -27,7 +27,7 @@
     "build": "rollup -c rollup.config.js"
   },
   "dependencies": {
-    "bootstrap": "^4.0",
+    "bootstrap": "^5.0",
     "jquery": "^3.3.1",
     "jquery-ui-dist": "^1.12.1"
   },

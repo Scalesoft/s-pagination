@@ -1,4 +1,5 @@
 /// <reference types="jquery" />
+/// <reference types="jquery" />
 /// <reference types="jqueryui" />
 export default interface Options {
     container: HTMLDivElement | JQuery;
@@ -8,6 +9,7 @@ export default interface Options {
     maxVisibleElements?: number;
     showSlider?: boolean;
     showInput?: boolean;
+    goToButtonLabel?: string;
     inputTitle?: string;
     enhancedMode?: boolean;
 }

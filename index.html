@@ -9,9 +9,8 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
     <script src="dist/pagination.js"></script>
-    <!--<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="bower_components/jquery-ui/themes/base/jquery-ui.css" />-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous"> 
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="dist/pagination.css" />
     <style>
@@ -35,7 +34,7 @@
     </div>
     <hr/>
     
-    <h3>Pagination with text input and limited elements count</h3>
+    <h3>Pagination with text input with custom go to button label and limited elements count</h3>
     <div>
         <samp>
             <span>Current page:</span>
@@ -131,6 +130,7 @@
             pageClickCallback: pageClick2,
             maxVisibleElements: 9,
             showInput: true,
+            goToButtonLabel: "Go",
             inputTitle: "Go to page"
         });
         pagination2.make(itemsCount, itemsOnPage);
