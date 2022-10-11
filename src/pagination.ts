@@ -223,7 +223,7 @@ class Pagination {
         goToPageButton.setAttribute("type", "button");
         goToPageButton.classList.add("btn");
         goToPageButton.classList.add("btn-outline-secondary");
-        goToPageButton.append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel);
+        goToPageButton.innerHTML = this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel;
         goToPageButton.addEventListener("click", this.onGoToPageButtonClick.bind(this));
 
         if (this.options.inputTitle) {

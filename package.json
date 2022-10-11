@@ -1,5 +1,5 @@
 {
-  "version": "2.2.1",
+  "version": "2.2.2-beta1",
   "name": "s-pagination",
   "description": "A JavaScript library for pagination using Bootstrap components.",
   "license": "MIT",
