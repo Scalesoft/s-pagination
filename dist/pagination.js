@@ -203,7 +203,7 @@
                 .attr("type", "button")
                 .addClass("btn")
                 .addClass("btn-outline-secondary")
-                .append(this.options.goToButtonLabel)
+                .append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel)
                 .click(this.onGoToPageButtonClick.bind(this));
             $(goToPageIcon)
                 .addClass("glyphicon")
