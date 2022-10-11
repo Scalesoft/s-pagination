@@ -1,7 +1,7 @@
 {
   "version": "2.2.0",
   "name": "s-pagination",
-  "description": "A JavaScript library for pagination with slider support using Bootstrap and jQuery UI components.",
+  "description": "A JavaScript library for pagination using Bootstrap components.",
   "license": "MIT",
   "author": "Scalesoft s.r.o.",
   "main": "dist/pagination.esm.js",

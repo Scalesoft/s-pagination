@@ -38,15 +38,15 @@ class Pagination {
 
         while (this.paginationContainer.firstChild) {this.paginationContainer.removeChild(this.paginationContainer.firstChild)}
 
-        const $innerContainer = document.createElement("div");
-        $innerContainer.classList.add("pagination-container");
+        const innerContainer = document.createElement("div");
+        innerContainer.classList.add("pagination-container");
         
-        $innerContainer.append(this.createPageList());
+        innerContainer.append(this.createPageList());
         if (this.options.showInput) {
-            $innerContainer.append(this.createPageInput());
+            innerContainer.append(this.createPageInput());
         }
 
-        this.paginationContainer.append($innerContainer);
+        this.paginationContainer.append(innerContainer);
 
         this.updateCurrentPage(defaultPageNumber, this.options.callPageClickCallbackOnInit);
     }
@@ -101,15 +101,14 @@ class Pagination {
         pageLi.classList.add("page-item");
         const pageLink = document.createElement("a");
         pageLink.classList.add("page-link");
-        const $pageLink = pageLink;
-        $pageLink.innerHTML = label;
-        $pageLink.setAttribute("data-page-number", pageNumber)
-        $pageLink.addEventListener("click",this.onPageClick.bind(this));
+        pageLink.innerHTML = label;
+        pageLink.setAttribute("data-page-number", pageNumber)
+        pageLink.addEventListener("click",this.onPageClick.bind(this));
         
         
         const pageClickUrl = this.options.pageClickUrl;
         const hrefUrl = pageClickUrl ? this.createPageClickUrl(pageNumber) : "#";
-        $pageLink.setAttribute("href", hrefUrl);
+        pageLink.setAttribute("href", hrefUrl);
 
         pageLi.appendChild(pageLink);
         return pageLi;
@@ -128,7 +127,6 @@ class Pagination {
     }
 
     private recreatePageElements(pageNumber: number) {
-        const $paginationUl = this.paginationUl;
         const pageCount = this.pageCount;
         const isEnhanced = this.options.enhancedMode;
         const previousPage = pageNumber > 2 ? pageNumber - 1 : 1;
@@ -140,17 +138,17 @@ class Pagination {
             if (createPageNumber === pageNumber) {
                 pageLi.classList.add("active");
             }
-            $paginationUl.append(pageLi);
+            this.paginationUl.append(pageLi);
         };
         
-        while ($paginationUl.firstChild) {$paginationUl.removeChild($paginationUl.firstChild)}
+        while (this.paginationUl.firstChild) {this.paginationUl.removeChild(this.paginationUl.firstChild)}
         
         if (pageCount <= this.maxVisibleElements - 2) {
-            $paginationUl.append(previousPageLi);
+            this.paginationUl.append(previousPageLi);
             for (let i = 1; i <= pageCount; i++) {
                 createAndAppendPageElement(i);
             }
-            $paginationUl.append(nextPageLi);
+            this.paginationUl.append(nextPageLi);
             return;
         }
 
@@ -170,17 +168,17 @@ class Pagination {
             centerLeftPage = centerRightPage - centerCount;
         }
 
-        $paginationUl.append(previousPageLi);
+        this.paginationUl.append(previousPageLi);
         createAndAppendPageElement(1);
 
         if (showDotsLeft) {
-            $paginationUl.append(this.createDotsPageElement());
+            this.paginationUl.append(this.createDotsPageElement());
         }
         let isRightEnhancement = false;
         if (isEnhanced) {
             if (centerLeftPage >= 5) {
                 createAndAppendPageElement(Math.ceil((centerLeftPage + 3) / 2));
-                $paginationUl.append(this.createDotsPageElement());
+                this.paginationUl.append(this.createDotsPageElement());
                 centerLeftPage += 2;
             }
             if (centerRightPage <= pageCount - 4) {
@@ -192,15 +190,15 @@ class Pagination {
             createAndAppendPageElement(i);
         }
         if (isRightEnhancement) {
-            $paginationUl.append(this.createDotsPageElement());
+            this.paginationUl.append(this.createDotsPageElement());
             createAndAppendPageElement(Math.floor((centerRightPage + pageCount) / 2));
         }
         if (showDotsRight) {
-            $paginationUl.append(this.createDotsPageElement());
+            this.paginationUl.append(this.createDotsPageElement());
         }
 
         createAndAppendPageElement(pageCount);
-        $paginationUl.append(nextPageLi);
+        this.paginationUl.append(nextPageLi);
     }
 
     private updateVisiblePageElements() {
