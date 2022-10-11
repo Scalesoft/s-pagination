@@ -5,7 +5,6 @@ declare class Pagination {
     private maxVisibleElements;
     private pageCount;
     private currentPage;
-    private usePaginationDots;
     private paginationUl;
     private goToPageInput;
     private sliderDiv;

@@ -1,6 +1,5 @@
 var Pagination = /** @class */ (function () {
     function Pagination(options) {
-        this.usePaginationDots = false;
         this.options = options;
         this.paginationContainer = $(options.container);
         this.maxVisibleElements = 13;
@@ -179,10 +178,8 @@ var Pagination = /** @class */ (function () {
     };
     Pagination.prototype.createPageInput = function () {
         var inputGroupDiv = document.createElement("div");
-        document.createElement("span");
         var goToPageInput = document.createElement("input");
         var goToPageButton = document.createElement("button");
-        var goToPageIcon = document.createElement("span");
         $(inputGroupDiv)
             .addClass("input-group")
             .addClass("input-group-sm")
@@ -199,9 +196,6 @@ var Pagination = /** @class */ (function () {
             .addClass("btn-outline-secondary")
             .append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel)
             .click(this.onGoToPageButtonClick.bind(this));
-        $(goToPageIcon)
-            .addClass("glyphicon")
-            .addClass("glyphicon-arrow-right");
         if (this.options.inputTitle) {
             $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
         }

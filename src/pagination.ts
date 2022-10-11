@@ -6,7 +6,6 @@ class Pagination {
     private maxVisibleElements: number;
     private pageCount: number;
     private currentPage: number;
-    private usePaginationDots = false;
     private paginationUl: HTMLUListElement;
     private goToPageInput: HTMLInputElement;
     private sliderDiv: HTMLDivElement;
@@ -225,10 +224,8 @@ class Pagination {
 
     private createPageInput(): HTMLDivElement {
         const inputGroupDiv = document.createElement("div");
-        const inputGroupButtonSpan = document.createElement("span");
         const goToPageInput = document.createElement("input");
         const goToPageButton = document.createElement("button");
-        const goToPageIcon = document.createElement("span");
 
         $(inputGroupDiv)
             .addClass("input-group")
@@ -243,17 +240,12 @@ class Pagination {
             .keypress(this.onGoToInputKeyPress.bind(this));
 
 
-
         $(goToPageButton)
             .attr("type", "button")
             .addClass("btn")
             .addClass("btn-outline-secondary")
             .append(this.options.goToButtonLabel === undefined ? "&#10140;" : this.options.goToButtonLabel)
             .click(this.onGoToPageButtonClick.bind(this));
-
-        $(goToPageIcon)
-            .addClass("glyphicon")
-            .addClass("glyphicon-arrow-right");
 
         if (this.options.inputTitle) {
             $([goToPageInput, goToPageButton]).attr("title", this.options.inputTitle);
