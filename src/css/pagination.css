@@ -31,7 +31,7 @@
     margin-left: -23px;
 }
 
-.three-dots {
+.three-dots span {
     position: relative;
     display: block;
     cursor: not-allowed;
@@ -39,4 +39,8 @@
     font-size: var(--bs-pagination-font-size);
     background-color: var(--bs-pagination-bg);
     border: var(--bs-pagination-border-width) solid var(--bs-pagination-border-color);
+}
+
+.three-dots:not(:first-child) span {
+    margin-left: calc(-1 * var(--bs-pagination-border-width));
 }
